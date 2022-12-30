@@ -1,0 +1,8 @@
+#!/bin/bash
+rm /opt/pyzender -rf 2> /dev/null
+echo 'Stopping pyZender service'
+systemctl stop pyzender.service 2> /dev/null
+echo 'Remove pyZender service from systemd'
+rm /lib/systemd/system/pyzender.service 2> /dev/null
+echo 'Reload systemd'
+systemctl daemon-reload
