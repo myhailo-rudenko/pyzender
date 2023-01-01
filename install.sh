@@ -8,12 +8,10 @@ cat << 'EOF' >/lib/systemd/system/pyzender.service
 [Unit]
 Description=pyZender service
 After=multi-user.target
-Conflicts=getty@tty1.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python /opt/pyzender/agent.py
-StandardInput=tty-force
+ExecStart=/usr/bin/python /opt/pyzender/agent.py >> /dev/null
 Restart=on-failure
 User=myhailo
 
