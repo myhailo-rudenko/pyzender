@@ -13,7 +13,7 @@ After=multi-user.target
 Type=simple
 ExecStart=/usr/bin/python /opt/pyzender/agent.py >> /dev/null
 Restart=on-failure
-User=myhailo
+User=$USER
 
 [Install]
 WantedBy=multi-user.target
