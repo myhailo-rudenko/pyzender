@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="pyZender",
-    version="0.2.7",
+    version="0.2.12",
     description="Simple agent to send data via Zabbix Sender binary",
     author="Myhailo Rudenko",
     author_email="myhailo.rudenko@gmail.com",
@@ -11,5 +11,6 @@ setup(
     install_requires=[
         'psutil>=5.9.1',
         'pydantic>=1.8.2',
+        'qbittorrent-api>=2022.4.30',
     ],
 )

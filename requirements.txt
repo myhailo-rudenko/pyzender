@@ -1,2 +1,3 @@
 psutil>=5.9.1
 pydantic>=1.8.2
+qbittorrent-api>=2022.4.30

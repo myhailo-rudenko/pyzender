@@ -14,6 +14,7 @@ class Agent:
             receiver_address: str,
             modules: List[Module],
             sender_path: str = "/usr/bin/zabbix_sender",
+            debug: bool = False,
     ):
         """
         receiver_hostname - The name of the host that will receive the statistics.
@@ -27,6 +28,8 @@ class Agent:
         self.sender_path = sender_path
         self.modules = modules
         self.report_queue = []
+        self.report_count = 0
+        self.debug = debug
 
     def _send_discovery(self, discovery: Discovery) -> None:
         """
@@ -46,9 +49,11 @@ class Agent:
                 "--value",
                 json.dumps(sender_data),
             ]
-            print(
-                f"Send discovery events to '{self.receiver_hostname}' via {self.receiver_address}: \n{sender_data}"
-            )
+
+            if self.debug:
+                print(
+                    f"Send discovery events to '{self.receiver_hostname}' via {self.receiver_address}: \n{sender_data}"
+                )
 
             try:
                 subprocess.check_output(sender_args)
@@ -72,9 +77,11 @@ class Agent:
                 "--input-file",
                 "-",
             ]
-            print(
-                f"Send items data to '{self.receiver_hostname}' via {self.receiver_address}: \n{sender_data}"
-            )
+
+            if self.debug:
+                print(
+                    f"Send items data to '{self.receiver_hostname}' via {self.receiver_address}: \n{sender_data}"
+                )
 
             try:
                 zabbix_sender = subprocess.Popen(
@@ -113,20 +120,20 @@ class Agent:
                 stdin_data += line
         return stdin_data
 
+    def report_queue_len(self) -> int:
+        return len(self.report_queue)
+
     def run(self, send_interval: int = 1):
         for module in self.modules:
             module.run(agent=self)
 
         while True:
             time.sleep(send_interval)
-            print(f"Report queue: [{len(self.report_queue)}]")
-            while len(self.report_queue) > 0:
+
+            while self.report_queue_len() > 0:
                 report = self.report_queue.pop(0)
-                if hasattr(report, "items"):
+
+                if isinstance(report, Data):
                     self._send_data(report)
-                elif hasattr(report, "values"):
+                elif isinstance(report, Discovery):
                     self._send_discovery(report)
-                # if hasattr(report, "items"):
-                #     self._send_data(report)
-                # elif hasattr(report, "values"):
-                #     self._send_discovery(report)

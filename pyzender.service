@@ -1,0 +1,12 @@
+[Unit]
+Description=pyZender service
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python /opt/pyzender/agent.py >> /dev/null
+Restart=on-failure
+User=${USER}
+
+[Install]
+WantedBy=multi-user.target

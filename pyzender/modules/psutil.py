@@ -19,11 +19,13 @@ class PSUtil(Module):
         self._memory()
         self._disks()
         self._mountpoints()
+        self._temperature_sensors()
 
     def _collect_discovery_reports(self):
         self._discover_threads()
         self._discover_disks()
         self._discover_mountpoints()
+        self._discover_temperature_sensors()
 
     def _discover_threads(self):
         threads = [n for n in range(psutil.cpu_count())]
@@ -52,6 +54,21 @@ class PSUtil(Module):
         discovery = Discovery(
             key="psutil.disk.discovery", macros="{#DISK}",
             values=disks
+        )
+
+        self._report(discovery)
+
+    def _discover_temperature_sensors(self):
+        temperature_sensors = psutil.sensors_temperatures()
+
+        sensors = []
+        for sensor, readings in temperature_sensors.items():
+            for reading in readings:
+                sensors.append(f"{sensor}.{reading.label}")
+
+        discovery = Discovery(
+            key="psutil.sensors.discovery", macros="{#TEMPERATURE}",
+            values=sensors
         )
 
         self._report(discovery)
@@ -224,3 +241,19 @@ class PSUtil(Module):
                 timestamp=timestamp,
             )
             self._report(data)
+
+    def _temperature_sensors(self):
+        temperature_sensors = psutil.sensors_temperatures(fahrenheit=False)
+        timestamp = self.timestamp()
+
+        for sensor, readings in temperature_sensors.items():
+            for reading in readings:
+                data = Data(
+                    items={
+                        "current": reading.current,
+                    },
+                    key="psutil.sensors.temperature",
+                    append_key=f"[{sensor}.{reading.label}]",
+                    timestamp=timestamp,
+                )
+                self._report(data)
