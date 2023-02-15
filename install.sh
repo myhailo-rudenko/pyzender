@@ -1,6 +1,6 @@
 #!/bin/bash
 echo 'Upgrade pyzender pip module'
-pip install ../pyzender
+pip install ./
 
 echo 'Copy pyzender script to /opt/pyzender/agent.py'
 mkdir /opt/pyzender 2> /dev/null
