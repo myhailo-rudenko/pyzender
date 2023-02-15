@@ -13,6 +13,7 @@ class Health(Module):
             items={
                 "running": 1,
                 "reports": self.agent.report_count + 1,
+                "queue": len(self.agent.report_queue)
             },
             key="pyzender.health",
             timestamp=self.timestamp(),
