@@ -14,7 +14,7 @@ class Agent:
             receiver_address: str,
             modules: List[Module],
             sender_path: str = "/usr/bin/zabbix_sender",
-            debug: bool = False,
+            debug_mode: bool = False,
     ):
         """
         receiver_hostname - The name of the host that will receive the statistics.
@@ -29,7 +29,7 @@ class Agent:
         self.modules = modules
         self.report_queue = []
         self.report_count = 0
-        self.debug = debug
+        self.debug_mode = debug_mode
 
     def _send_discovery(self, discovery: Discovery) -> None:
         """
@@ -50,7 +50,7 @@ class Agent:
                 json.dumps(sender_data),
             ]
 
-            if self.debug:
+            if self.debug_mode:
                 print(
                     f"Send discovery events to '{self.receiver_hostname}' via {self.receiver_address}: \n{sender_data}"
                 )
@@ -78,7 +78,7 @@ class Agent:
                 "-",
             ]
 
-            if self.debug:
+            if self.debug_mode:
                 print(
                     f"Send items data to '{self.receiver_hostname}' via {self.receiver_address}: \n{sender_data}"
                 )
