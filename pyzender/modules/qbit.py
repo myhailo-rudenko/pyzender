@@ -25,11 +25,11 @@ class QBittorrent(Module):
             VERIFY_WEBUI_CERTIFICATE=verify_ssl,
         )
 
-        self.max_name_len = 60
-        self.separator = "..."
-
-        self.left_part_len = self.max_name_len // 2
-        self.right_part_len = self.max_name_len - self.left_part_len - len(self.separator)
+        # self.max_name_len = 60
+        # self.separator = "..."
+        #
+        # self.left_part_len = self.max_name_len // 2
+        # self.right_part_len = self.max_name_len - self.left_part_len - len(self.separator)
 
     @staticmethod
     def _fix_name(torrent_name: str) -> str:
