@@ -29,10 +29,13 @@ class Module(ABC):
             data_interval: int = 60,
             discovery_interval: int = 300,
     ):
+        self.name = self.__class__.__name__
         self.done = False
         self.agent = None
         self.data_thread = Thread(target=self._update_data, args=[data_interval])
         self.discovery_thread = Thread(target=self._update_discovery, args=[discovery_interval])
+
+        print(f"'{self.name}' module initialized successfully.")
 
     @abstractmethod
     def _collect_data_reports(self) -> None:
@@ -50,6 +53,7 @@ class Module(ABC):
         self.agent.report_queue.append(report)
 
     def _report_exception(self, message: str):
+        print(f"'{self.name}' module has failed with an error: {message}")
         exception = Data(
             items={"availability": 1, "exception": message},
             key="pyzender",
@@ -74,11 +78,13 @@ class Module(ABC):
                 self._report_exception(str(msg))
 
     def run(self, agent):
+        print(f"'{self.name}' module is running.")
         self.agent = agent
         self.discovery_thread.start()
         self.data_thread.start()
 
     def stop(self):
+        print(f"'{self.name}' module has stopped.")
         self.done = True
         self.discovery_thread.join()
         self.data_thread.join()
