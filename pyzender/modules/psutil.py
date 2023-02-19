@@ -20,6 +20,7 @@ class PSUtil(Module):
         self._disks()
         self._mountpoints()
         self._temperature_sensors()
+        self._networks()
 
     def _collect_discovery_reports(self):
         self._discover_threads()
@@ -257,3 +258,22 @@ class PSUtil(Module):
                     timestamp=timestamp,
                 )
                 self._report(data)
+
+    def _networks(self):
+        net_io = psutil.net_io_counters()
+
+        data = Data(
+            items={
+                "bytes_recv": net_io.bytes_recv,
+                "bytes_sent": net_io.bytes_sent,
+                "packets_recv": net_io.packets_recv,
+                "packets_sent": net_io.packets_sent,
+                "dropin": net_io.dropin,
+                "dropout": net_io.dropout,
+                "errin": net_io.errin,
+                "errout": net_io.errout,
+            },
+            key="psutil.net",
+            timestamp=self.timestamp(),
+        )
+        self._report(data)

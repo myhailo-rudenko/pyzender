@@ -1,6 +1,6 @@
 zabbix_export:
   version: '5.4'
-  date: '2023-02-06T20:53:08Z'
+  date: '2023-02-19T08:23:12Z'
   groups:
     -
       uuid: 7df96b18c230490a9a0a9e2307226338
@@ -546,6 +546,146 @@ zabbix_export:
               - BSD: active + wired + cached
               - Linux: total - free
         -
+          uuid: 8e77460957ec41029e1ed9b0c1daecca
+          name: 'Network: byte receive rate'
+          type: TRAP
+          key: psutil.net.bytes_recv
+          delay: '0'
+          history: 7d
+          units: B/s
+          preprocessing:
+            -
+              type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - '{$PSUTIL_HEARTBEAT}'
+        -
+          uuid: 6b01d02cc47d4859bda413a2a950eb7c
+          name: 'Network: byte send rate'
+          type: TRAP
+          key: psutil.net.bytes_sent
+          delay: '0'
+          history: 7d
+          units: B/s
+          preprocessing:
+            -
+              type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - '{$PSUTIL_HEARTBEAT}'
+        -
+          uuid: 12687520f0734298adef877fb68ec9ff
+          name: 'Network: drop in'
+          type: TRAP
+          key: psutil.net.dropin
+          delay: '0'
+          history: 7d
+          units: drop/s
+          description: 'The number of dropped incoming packets per second'
+          preprocessing:
+            -
+              type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - '{$PSUTIL_HEARTBEAT}'
+        -
+          uuid: cf4871dcdb44448fa27e2b0fec7a3106
+          name: 'Network: drop out'
+          type: TRAP
+          key: psutil.net.dropout
+          delay: '0'
+          history: 7d
+          units: drop/s
+          description: 'The number of dropped outcoming packets per second'
+          preprocessing:
+            -
+              type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - '{$PSUTIL_HEARTBEAT}'
+        -
+          uuid: b0c7ba761268493ebe7a5025c96b5f4a
+          name: 'Network: error in'
+          type: TRAP
+          key: psutil.net.errin
+          delay: '0'
+          history: 7d
+          units: error/s
+          description: 'The number of errored incoming packets per second'
+          preprocessing:
+            -
+              type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - '{$PSUTIL_HEARTBEAT}'
+        -
+          uuid: fd9e7d32ba074aa0940dc8eb65b13eb2
+          name: 'Network: error out'
+          type: TRAP
+          key: psutil.net.errout
+          delay: '0'
+          history: 7d
+          units: error/s
+          description: 'The number of errored outcoming packets per second'
+          preprocessing:
+            -
+              type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - '{$PSUTIL_HEARTBEAT}'
+        -
+          uuid: 6e540a6014d049b1b7b42fc7b7e93a36
+          name: 'Network: packet receive rate'
+          type: TRAP
+          key: psutil.net.packets_recv
+          delay: '0'
+          history: 7d
+          units: packet/s
+          preprocessing:
+            -
+              type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - '{$PSUTIL_HEARTBEAT}'
+        -
+          uuid: 51a3b9b8dc05452fb4607319da05caa8
+          name: 'Network: packet send rate'
+          type: TRAP
+          key: psutil.net.packets_sent
+          delay: '0'
+          history: 7d
+          units: packet/s
+          preprocessing:
+            -
+              type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - '{$PSUTIL_HEARTBEAT}'
+        -
           uuid: 9c7eb059e3fb4a6a9d25e9e134c7067c
           name: 'Swap: free'
           type: TRAP
@@ -913,7 +1053,7 @@ zabbix_export:
               widgets:
                 -
                   type: GRAPH_CLASSIC
-                  width: '7'
+                  width: '8'
                   height: '6'
                   fields:
                     -
@@ -928,20 +1068,8 @@ zabbix_export:
                         host: 'OS Linux - Python Agent - Psutil Module'
                 -
                   type: GRAPH_CLASSIC
-                  x: '7'
-                  width: '10'
-                  height: '12'
-                  fields:
-                    -
-                      type: GRAPH
-                      name: graphid
-                      value:
-                        name: 'CPU times'
-                        host: 'OS Linux - Python Agent - Psutil Module'
-                -
-                  type: GRAPH_CLASSIC
-                  'y': '6'
-                  width: '7'
+                  'y': '12'
+                  width: '8'
                   height: '6'
                   fields:
                     -
@@ -956,8 +1084,9 @@ zabbix_export:
                         host: 'OS Linux - Python Agent - Psutil Module'
                 -
                   type: GRAPH_CLASSIC
-                  x: '17'
-                  width: '7'
+                  x: '8'
+                  'y': '12'
+                  width: '8'
                   height: '6'
                   fields:
                     -
@@ -972,9 +1101,9 @@ zabbix_export:
                         host: 'OS Linux - Python Agent - Psutil Module'
                 -
                   type: GRAPH_CLASSIC
-                  x: '17'
-                  'y': '6'
-                  width: '7'
+                  x: '16'
+                  'y': '12'
+                  width: '8'
                   height: '6'
                   fields:
                     -
@@ -988,15 +1117,48 @@ zabbix_export:
                         key: psutil.swap.percent
                         host: 'OS Linux - Python Agent - Psutil Module'
                 -
+                  type: GRAPH_CLASSIC
+                  x: '8'
+                  width: '8'
+                  height: '6'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '1'
+                    -
+                      type: ITEM
+                      name: itemid
+                      value:
+                        key: psutil.net.bytes_recv
+                        host: 'OS Linux - Python Agent - Psutil Module'
+                -
+                  type: GRAPH_CLASSIC
+                  x: '8'
+                  'y': '6'
+                  width: '8'
+                  height: '6'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '1'
+                    -
+                      type: ITEM
+                      name: itemid
+                      value:
+                        key: psutil.net.bytes_sent
+                        host: 'OS Linux - Python Agent - Psutil Module'
+                -
                   type: GRAPH_PROTOTYPE
-                  'y': '12'
-                  width: '7'
+                  'y': '18'
+                  width: '24'
                   height: '6'
                   fields:
                     -
                       type: INTEGER
                       name: columns
-                      value: '1'
+                      value: '3'
                     -
                       type: INTEGER
                       name: source_type
@@ -1006,6 +1168,55 @@ zabbix_export:
                       name: itemid
                       value:
                         key: 'psutil.sensors.temperature.current.[{#TEMPERATURE}]'
+                        host: 'OS Linux - Python Agent - Psutil Module'
+                -
+                  type: GRAPH_CLASSIC
+                  'y': '6'
+                  width: '8'
+                  height: '6'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '1'
+                    -
+                      type: ITEM
+                      name: itemid
+                      value:
+                        key: psutil.cpu.times.iowait
+                        host: 'OS Linux - Python Agent - Psutil Module'
+                -
+                  type: GRAPH_CLASSIC
+                  x: '16'
+                  width: '8'
+                  height: '6'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '1'
+                    -
+                      type: ITEM
+                      name: itemid
+                      value:
+                        key: psutil.disk.read_bytes
+                        host: 'OS Linux - Python Agent - Psutil Module'
+                -
+                  type: GRAPH_CLASSIC
+                  x: '16'
+                  'y': '6'
+                  width: '8'
+                  height: '6'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '1'
+                    -
+                      type: ITEM
+                      name: itemid
+                      value:
+                        key: psutil.disk.write_bytes
                         host: 'OS Linux - Python Agent - Psutil Module'
     -
       uuid: 0e9d685f7dad4763bead407d8691a854
@@ -1024,6 +1235,19 @@ zabbix_export:
           history: 7d
           trends: '0'
           value_type: TEXT
+        -
+          uuid: d50c534f5505458da42cf6449b91aced
+          name: Queue
+          type: TRAP
+          key: pyzender.health.queue
+          delay: '0'
+          history: 7d
+          units: reports
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - '{$HEALTH_HEARTBEAT}'
         -
           uuid: e1bcc75091d542d1a5cb071f072e938c
           name: 'Report count'
