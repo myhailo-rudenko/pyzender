@@ -2,6 +2,9 @@ import psutil
 
 from pyzender.modules.base import Module, Data, Discovery
 
+IP4_ADDRESS_FAMILY = 2
+IP6_ADDRESS_FAMILY = 10
+
 
 class PSUtil(Module):
     @staticmethod
@@ -27,6 +30,12 @@ class PSUtil(Module):
         self._discover_disks()
         self._discover_mountpoints()
         self._discover_temperature_sensors()
+        self._discover_network_interfaces()
+
+    def _discover_network_interfaces(self):
+        nics = [nic for nic in psutil.net_if_addrs()]
+        discovery = Discovery(key="psutil.net.discovery", macros="{#NIC}", values=nics)
+        self._report(discovery)
 
     def _discover_threads(self):
         threads = [n for n in range(psutil.cpu_count())]
@@ -73,6 +82,70 @@ class PSUtil(Module):
         )
 
         self._report(discovery)
+
+    def _per_nic_stats(self):
+        nic_stats = psutil.net_if_stats()
+        timestamp = self.timestamp()
+
+        for nic, stats in nic_stats.items():
+            nic_items = {
+                "isup": int(stats.isup),
+                "duplex": stats.duplex,
+                "speed": stats.speed,
+                "mtu": stats.mtu,
+            }
+            data = Data(items=nic_items, key="psutil.net", append_key=f"[{nic}]", timestamp=timestamp)
+            self._report(data)
+
+    def _per_nic_io_counters(self):
+        nic_counters = psutil.net_io_counters(pernic=True)
+        timestamp = self.timestamp()
+
+        for nic, counters in nic_counters.items():
+            nic_items = {
+                "bytes_recv": counters.bytes_recv,
+                "bytes_sent": counters.bytes_sent,
+                "packets_recv": counters.packets_recv,
+                "packets_sent": counters.packets_sent,
+                "dropin": counters.dropin,
+                "dropout": counters.dropout,
+                "errin": counters.errin,
+                "errout": counters.errout,
+            }
+            data = Data(items=nic_items, key="psutil.net", append_key=f"[{nic}]", timestamp=timestamp)
+            self._report(data)
+
+    def _per_nic_addresses(self):
+        nic_addresses = psutil.net_if_addrs()
+        timestamp = self.timestamp()
+
+        for nic, addresses in nic_addresses.items():
+            nic_items = {}
+
+            for address in addresses:
+                if address.family == IP4_ADDRESS_FAMILY:
+                    ip4 = {
+                        "ip4": {
+                            "address": address.address,
+                            "netmask": address.netmask,
+                            "broadcast": address.broadcast,
+                            "ptp": address.ptp,
+                        }
+                    }
+                    nic_items.update(ip4)
+                elif address.family == IP6_ADDRESS_FAMILY:
+                    ip6 = {
+                        "ip6": {
+                            "address": address.address,
+                            "netmask": address.netmask,
+                            "broadcast": address.broadcast,
+                            "ptp": address.ptp,
+                        }
+                    }
+                    nic_items.update(ip6)
+
+                data = Data(items=nic_items, key="psutil.net", append_key=f"[{nic}]", timestamp=timestamp, )
+                self._report(data)
 
     def _per_cpu_usage(self):
         per_cpu_usage = psutil.cpu_percent(percpu=True)
@@ -277,3 +350,7 @@ class PSUtil(Module):
             timestamp=self.timestamp(),
         )
         self._report(data)
+
+        self._per_nic_stats()
+        self._per_nic_addresses()
+        self._per_nic_io_counters()

@@ -1,6 +1,6 @@
 zabbix_export:
   version: '5.4'
-  date: '2023-02-19T08:23:12Z'
+  date: '2023-02-20T13:18:04Z'
   groups:
     -
       uuid: 7df96b18c230490a9a0a9e2307226338
@@ -15,8 +15,6 @@ zabbix_export:
           name: 'OS Linux - Python Agent - Psutil Module'
         -
           name: 'OS Linux - Python Agent - Pyzender Health Module'
-        -
-          name: 'OS Linux - Python Agent - QBittorrent Module'
       groups:
         -
           name: Templates
@@ -337,6 +335,21 @@ zabbix_export:
           history: 7d
           value_type: FLOAT
           units: '%'
+        -
+          uuid: 7b624a2769f54ef9b171bb1c84ba2758
+          name: 'CPU: usage (calc)'
+          type: CALCULATED
+          key: psutil.cpu.usage.calc
+          delay: '5'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          params: last(//psutil.cpu.usage)
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED
+              parameters:
+                - ''
         -
           uuid: f9551a0e865a46b990b7b4890ce8a314
           name: 'Disks: read bytes'
@@ -992,6 +1005,323 @@ zabbix_export:
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
         -
+          uuid: d8cc27fae8c2413ea9be38acbd21200a
+          name: 'Network inteface'
+          type: TRAP
+          key: psutil.net.discovery
+          delay: '0'
+          lifetime: 1h
+          item_prototypes:
+            -
+              uuid: ad3b1f82d2ea493f8ae5bfae3cbcd41a
+              name: '{#NIC}: byte receive rate'
+              type: TRAP
+              key: 'psutil.net.bytes_recv.[{#NIC}]'
+              delay: '0'
+              history: 7d
+              units: B/s
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - '{$PSUTIL_HEARTBEAT}'
+            -
+              uuid: 518946eae93b43c1ae3f5633e8406b8a
+              name: '{#NIC}: byte send rate'
+              type: TRAP
+              key: 'psutil.net.bytes_sent.[{#NIC}]'
+              delay: '0'
+              history: 7d
+              units: B/s
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - '{$PSUTIL_HEARTBEAT}'
+            -
+              uuid: 681f4355cd4c45bc8dbdf4be09be2d60
+              name: '{#NIC}: drop in'
+              type: TRAP
+              key: 'psutil.net.dropin.[{#NIC}]'
+              delay: '0'
+              history: 7d
+              units: drop/s
+              description: 'The number of dropped incoming packets per second'
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - '{$PSUTIL_HEARTBEAT}'
+            -
+              uuid: d29710ab86474a46b7efd01a9545c2af
+              name: '{#NIC}: drop out'
+              type: TRAP
+              key: 'psutil.net.dropout.[{#NIC}]'
+              delay: '0'
+              history: 7d
+              units: drop/s
+              description: 'The number of dropped outcoming packets per second'
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - '{$PSUTIL_HEARTBEAT}'
+            -
+              uuid: 3f91a099fcd24619a32b63faaffc3c19
+              name: '{#NIC}: duplex'
+              type: TRAP
+              key: 'psutil.net.duplex.[{#NIC}]'
+              delay: '0'
+              history: 7d
+              valuemap:
+                name: NIC_DUPLEX
+              preprocessing:
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - '{$PSUTIL_HEARTBEAT}'
+            -
+              uuid: 92fa338e651c44c79052506917fd3715
+              name: '{#NIC}: error in'
+              type: TRAP
+              key: 'psutil.net.errin.[{#NIC}]'
+              delay: '0'
+              history: 7d
+              units: error/s
+              description: 'The number of errored incoming packets per second'
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - '{$PSUTIL_HEARTBEAT}'
+            -
+              uuid: 5a684efe185242958e0d29143a2043aa
+              name: '{#NIC}: error out'
+              type: TRAP
+              key: 'psutil.net.errout.[{#NIC}]'
+              delay: '0'
+              history: 7d
+              units: error/s
+              description: 'The number of errored outcoming packets per second'
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - '{$PSUTIL_HEARTBEAT}'
+            -
+              uuid: 75605807d6a640919bc38b0512859ced
+              name: '{#NIC}: ip4 address'
+              type: TRAP
+              key: 'psutil.net.ip4.address.[{#NIC}]'
+              delay: '0'
+              history: 7d
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - '{$PSUTIL_HEARTBEAT}'
+            -
+              uuid: 4c6cb1e854a143cbaa5611868f5d5d4c
+              name: '{#NIC}: ip4 broadcast'
+              type: TRAP
+              key: 'psutil.net.ip4.broadcast.[{#NIC}]'
+              delay: '0'
+              history: 7d
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - '{$PSUTIL_HEARTBEAT}'
+            -
+              uuid: 78e07e68a2234333a55bff59e59ee1de
+              name: '{#NIC}: ip4 netmask'
+              type: TRAP
+              key: 'psutil.net.ip4.netmask.[{#NIC}]'
+              delay: '0'
+              history: 7d
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - '{$PSUTIL_HEARTBEAT}'
+            -
+              uuid: 74440330a3ed4e8f8baf6765637cbfc2
+              name: '{#NIC}: ip4 ptp'
+              type: TRAP
+              key: 'psutil.net.ip4.ptp.[{#NIC}]'
+              delay: '0'
+              history: 7d
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - '{$PSUTIL_HEARTBEAT}'
+            -
+              uuid: 60d454e8dc6843239ebf1e4de6d76e25
+              name: '{#NIC}: ip6 address'
+              type: TRAP
+              key: 'psutil.net.ip6.address.[{#NIC}]'
+              delay: '0'
+              history: 7d
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - '{$PSUTIL_HEARTBEAT}'
+            -
+              uuid: 0b581f1fb3ef490ca0c67e0a85a31957
+              name: '{#NIC}: ip6 broadcast'
+              type: TRAP
+              key: 'psutil.net.ip6.broadcast.[{#NIC}]'
+              delay: '0'
+              history: 7d
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - '{$PSUTIL_HEARTBEAT}'
+            -
+              uuid: ddf289260e8a45a5bfdf7b76e2178177
+              name: '{#NIC}: ip6 netmask'
+              type: TRAP
+              key: 'psutil.net.ip6.netmask.[{#NIC}]'
+              delay: '0'
+              history: 7d
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - '{$PSUTIL_HEARTBEAT}'
+            -
+              uuid: 2fea3e551a034e62a976a853b2b44f42
+              name: '{#NIC}: ip6 ptp'
+              type: TRAP
+              key: 'psutil.net.ip6.ptp.[{#NIC}]'
+              delay: '0'
+              history: 7d
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - '{$PSUTIL_HEARTBEAT}'
+            -
+              uuid: 420ac491fdc542a5bfdde0ba37d334cd
+              name: '{#NIC}: state'
+              type: TRAP
+              key: 'psutil.net.isup.[{#NIC}]'
+              delay: '0'
+              history: 7d
+              valuemap:
+                name: UP_DOWN
+              preprocessing:
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - '{$PSUTIL_HEARTBEAT}'
+            -
+              uuid: 861ddd3224a6473484a6a6abcff55fed
+              name: '{#NIC}: mtu'
+              type: TRAP
+              key: 'psutil.net.mtu.[{#NIC}]'
+              delay: '0'
+              history: 7d
+              preprocessing:
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - '{$PSUTIL_HEARTBEAT}'
+            -
+              uuid: 8092f51fb02a46f9b386346bafcaaa27
+              name: '{#NIC}: packet receive rate'
+              type: TRAP
+              key: 'psutil.net.packets_recv.[{#NIC}]'
+              delay: '0'
+              history: 7d
+              units: packet/s
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - '{$PSUTIL_HEARTBEAT}'
+            -
+              uuid: 7c817f2db0e4476ba32fc07e6b832ae6
+              name: '{#NIC}: packet send rate'
+              type: TRAP
+              key: 'psutil.net.packets_sent.[{#NIC}]'
+              delay: '0'
+              history: 7d
+              units: packet/s
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - '{$PSUTIL_HEARTBEAT}'
+            -
+              uuid: 09f49498a34f42c28eb1b1955a32e8c6
+              name: '{#NIC}: speed'
+              type: TRAP
+              key: 'psutil.net.speed.[{#NIC}]'
+              delay: '0'
+              history: 7d
+              units: b
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '1000000'
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - '{$PSUTIL_HEARTBEAT}'
+        -
           uuid: 3e9aac89cde747eb92d395bc4aa27ba5
           name: Sensor
           type: TRAP
@@ -1053,22 +1383,7 @@ zabbix_export:
               widgets:
                 -
                   type: GRAPH_CLASSIC
-                  width: '8'
-                  height: '6'
-                  fields:
-                    -
-                      type: INTEGER
-                      name: source_type
-                      value: '1'
-                    -
-                      type: ITEM
-                      name: itemid
-                      value:
-                        key: psutil.cpu.usage
-                        host: 'OS Linux - Python Agent - Psutil Module'
-                -
-                  type: GRAPH_CLASSIC
-                  'y': '12'
+                  'y': '18'
                   width: '8'
                   height: '6'
                   fields:
@@ -1151,7 +1466,7 @@ zabbix_export:
                         host: 'OS Linux - Python Agent - Psutil Module'
                 -
                   type: GRAPH_PROTOTYPE
-                  'y': '18'
+                  'y': '24'
                   width: '24'
                   height: '6'
                   fields:
@@ -1171,7 +1486,7 @@ zabbix_export:
                         host: 'OS Linux - Python Agent - Psutil Module'
                 -
                   type: GRAPH_CLASSIC
-                  'y': '6'
+                  'y': '12'
                   width: '8'
                   height: '6'
                   fields:
@@ -1184,6 +1499,37 @@ zabbix_export:
                       name: itemid
                       value:
                         key: psutil.cpu.times.iowait
+                        host: 'OS Linux - Python Agent - Psutil Module'
+                -
+                  type: GRAPH_CLASSIC
+                  'y': '6'
+                  width: '8'
+                  height: '6'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '1'
+                    -
+                      type: ITEM
+                      name: itemid
+                      value:
+                        key: psutil.cpu.usage
+                        host: 'OS Linux - Python Agent - Psutil Module'
+                -
+                  type: GRAPH_CLASSIC
+                  width: '8'
+                  height: '6'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '1'
+                    -
+                      type: ITEM
+                      name: itemid
+                      value:
+                        key: psutil.cpu.usage.calc
                         host: 'OS Linux - Python Agent - Psutil Module'
                 -
                   type: GRAPH_CLASSIC
@@ -1218,6 +1564,72 @@ zabbix_export:
                       value:
                         key: psutil.disk.write_bytes
                         host: 'OS Linux - Python Agent - Psutil Module'
+                -
+                  type: GRAPH_PROTOTYPE
+                  x: '8'
+                  'y': '18'
+                  width: '8'
+                  height: '6'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: columns
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '3'
+                    -
+                      type: ITEM_PROTOTYPE
+                      name: itemid
+                      value:
+                        key: 'psutil.net.bytes_sent.[{#NIC}]'
+                        host: 'OS Linux - Python Agent - Psutil Module'
+                -
+                  type: GRAPH_PROTOTYPE
+                  x: '16'
+                  'y': '18'
+                  width: '8'
+                  height: '6'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: columns
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '3'
+                    -
+                      type: ITEM_PROTOTYPE
+                      name: itemid
+                      value:
+                        key: 'psutil.net.bytes_recv.[{#NIC}]'
+                        host: 'OS Linux - Python Agent - Psutil Module'
+      valuemaps:
+        -
+          uuid: 06147666aa454b939d506ef3668d7072
+          name: NIC_DUPLEX
+          mappings:
+            -
+              value: '0'
+              newvalue: unknown
+            -
+              value: '1'
+              newvalue: half
+            -
+              value: '2'
+              newvalue: full
+        -
+          uuid: ce0e76671c9d47cbbeac3b4f9fdd06ee
+          name: UP_DOWN
+          mappings:
+            -
+              value: '1'
+              newvalue: up
+            -
+              value: '0'
+              newvalue: down
     -
       uuid: 0e9d685f7dad4763bead407d8691a854
       template: 'OS Linux - Python Agent - Pyzender Health Module'
