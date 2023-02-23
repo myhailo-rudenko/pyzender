@@ -13,6 +13,6 @@ qbittorrent = QBittorrent(
 )
 
 modules = [psutil, health, qbittorrent]
-agent = Agent(receiver_hostname="workstation", receiver_address="192.168.0.3", modules=modules)
+agent = Agent(hostname="test", zabbix_server="192.168.0.3", modules=modules, debug_mode=True)
 
 agent.run(1)

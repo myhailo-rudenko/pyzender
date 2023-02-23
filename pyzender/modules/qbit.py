@@ -1,6 +1,6 @@
 import qbittorrentapi
 
-from pyzender.modules.base import Module, Discovery, Data
+from pyzender.modules.base import Module, DiscoveryReport, DataReport
 
 
 class QBittorrent(Module):
@@ -47,7 +47,7 @@ class QBittorrent(Module):
     def discover_torrents(self):
         torrents = [self._fix_name(t.info.name) for t in self.qbt_client.torrents.info()]
 
-        discovery = Discovery(
+        discovery = DiscoveryReport(
             key="qbittorrent.torrent.discovery", macros="{#TORRENT_NAME}",
             values=torrents
         )
@@ -59,7 +59,7 @@ class QBittorrent(Module):
 
         for torrent in self.qbt_client.torrents.info():
             name = self._fix_name(torrent.info.name)
-            data = Data(
+            data = DataReport(
                 items=dict(torrent.info),
                 key="qbittorrent.torrent",
                 append_key=f"[{name}]",

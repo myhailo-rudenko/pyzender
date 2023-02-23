@@ -6,21 +6,21 @@ from typing import Optional, List, Union
 from pydantic import BaseModel, Field
 
 
-class Data(BaseModel):
+class DataReport(BaseModel):
     items: dict
     key: str = Field(..., description="example: 'qbittorrent.torrent'")
     append_key: str = Field("", description="example: f'[{name}]'")
     timestamp: int
-    receiver_hostname: Optional[str]
-    receiver_address: Optional[str]
+    hostname: Optional[str] = Field("default")
+    server: Optional[str] = Field("default")
 
 
-class Discovery(BaseModel):
+class DiscoveryReport(BaseModel):
     key: str = Field(..., description="example: 'qbittorrent.torrent.discovery'")
     macros: str = Field(..., description="example: '{#TORRENT_NAME}'")
     values: List[str]
-    receiver_hostname: Optional[str]
-    receiver_address: Optional[str]
+    hostname: Optional[str] = Field("default")
+    server: Optional[str] = Field("default")
 
 
 class Module(ABC):
@@ -49,12 +49,12 @@ class Module(ABC):
     def timestamp() -> int:
         return int(time.time())
 
-    def _report(self, report: Union[Data, Discovery]):
+    def _report(self, report: Union[DataReport, DiscoveryReport]):
         self.agent.report_queue.append(report)
 
     def _report_exception(self, message: str):
         print(f"'{self.name}' module has failed with an error: {message}")
-        exception = Data(
+        exception = DataReport(
             items={"availability": 1, "exception": message},
             key="pyzender",
             timestamp=self.timestamp(),

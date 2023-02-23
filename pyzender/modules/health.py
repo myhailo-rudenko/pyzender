@@ -1,4 +1,4 @@
-from pyzender.modules.base import Module, Data
+from pyzender.modules.base import Module, DataReport
 
 
 class Health(Module):
@@ -9,7 +9,7 @@ class Health(Module):
         pass
 
     def _agent_health(self):
-        health = Data(
+        health = DataReport(
             items={
                 "running": 1,
                 "reports": self.agent.report_count + 1,
