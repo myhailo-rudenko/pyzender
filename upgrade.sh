@@ -1,11 +1,13 @@
 #!/bin/bash
 echo "Remove old package"
-rm /opt/pyzender/pyzender-latest -rf 2> /dev/null
+cd /opt/pyzender
+rm ./latest.tar.gz
+rm ./pyzender-latest -rf 2> /dev/null
 
 echo "Download the latest version of pyzender"
-wget https://github.com/myhailo-rudenko/pyzender/archive/refs/tags/latest.tar.gz -P /opt/pyzender/
+wget https://github.com/myhailo-rudenko/pyzender/archive/refs/tags/latest.tar.gz
 
-tar xvf /opt/pyzender/latest.tar.gz
+tar xvf ./latest.tar.gz
 
-cd /opt/pyzender/pyzender-latest
+cd ./pyzender-latest
 . install.sh
