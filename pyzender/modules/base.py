@@ -32,10 +32,10 @@ class Module(ABC):
         self.name = self.__class__.__name__
         self.done = False
         self.agent = None
-        self.data_thread = Thread(target=self._update_data, args=[data_interval])
-        self.discovery_thread = Thread(target=self._update_discovery, args=[discovery_interval])
+        self.data_thread = Thread(target=self._update_data, args=[int(data_interval)])
+        self.discovery_thread = Thread(target=self._update_discovery, args=[int(discovery_interval)])
 
-        print(f"'{self.name}' module initialized successfully.")
+        print(f"'{self.name}' class initialized successfully.")
 
     @abstractmethod
     def _collect_data_reports(self) -> None:

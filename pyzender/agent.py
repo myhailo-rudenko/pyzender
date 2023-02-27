@@ -15,7 +15,10 @@ class Agent:
             zabbix_server: str,
             modules: List[Module],
             sender_path: str = "/usr/bin/zabbix_sender",
-            debug_mode: bool = False,
+            debug_mode: int = 0,
+            queue_lookup_interval: int = 1,
+            queue_update_interval: int = 1,
+            queue_send_size: int = 250,
     ):
         """
         hostname - The name of the host that will receive the statistics.
@@ -23,10 +26,12 @@ class Agent:
         zabbix_address - The IP address of the Zabbix Server or Zabbix Proxy.
         sender_path - Path to the zabbix_sender binary
         """
-
         self.hostname = hostname
         self.zabbix_server = zabbix_server
         self.sender_path = sender_path
+        self.queue_lookup_interval = queue_lookup_interval
+        self.queue_update_interval = queue_update_interval
+        self.queue_send_size = queue_send_size if 0 < queue_send_size <= 250 else 250
         self.modules = modules
         self.report_queue = []
         self.report_count = 0
@@ -82,7 +87,7 @@ class Agent:
                 "-",
             ]
 
-            while len(data_lines) >= 250:
+            while len(data_lines) >= self.queue_send_size:
                 try:
                     zabbix_sender = subprocess.Popen(
                         sender_args, stdout=subprocess.PIPE, stdin=subprocess.PIPE
@@ -91,8 +96,8 @@ class Agent:
                     print("Unable to open Zabbix Sender process:", str(e))
                     sys.exit(1)
 
-                data_portion = data_lines[:250]
-                del data_lines[:250]
+                data_portion = data_lines[:self.queue_send_size]
+                del data_lines[:self.queue_send_size]
 
                 sender_data = "".join(data_portion)
 
@@ -107,7 +112,7 @@ class Agent:
     def _send_data_thread(self) -> None:
         print(f"Starting data thread.")
         while True:
-            time.sleep(1)
+            time.sleep(self.queue_lookup_interval)
             self._send_data()
 
     def _update_data_queue(self, data_report: DataReport, recursive_dict: dict = {}, recursive_key_path: str = ""):
@@ -137,14 +142,14 @@ class Agent:
                 line = f'- {key_path} {data_report.timestamp} "{value}"\r\n'
                 self.data_queue[group].append(line)
 
-    def run(self, send_interval: int = 1):
+    def run(self):
         for module in self.modules:
             module.run(agent=self)
 
         self.data_thread.start()
 
         while True:
-            time.sleep(send_interval)
+            time.sleep(self.queue_update_interval)
 
             while len(self.report_queue) > 0:
                 report = self.report_queue.pop(0)

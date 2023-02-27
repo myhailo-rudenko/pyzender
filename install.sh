@@ -1,14 +1,17 @@
 #!/bin/bash
 echo 'Install zabbix-sender binary'
-sudo apt update && apt install zabbix-sender -y
+sudo apt update && sudo apt install zabbix-sender -y
 
 echo 'Upgrade pyzender pip module'
 pip install ./
 
-echo 'Copy pyzender script to /opt/pyzender/agent.py'
-mkdir /opt/pyzender 2> /dev/null
-cp agent.py /opt/pyzender/agent.py
-chmod 644 /opt/pyzender/agent.py
+echo 'Copy pyzender script to /var/lib/pyzender/agent.py'
+sudo mkdir /var/lib/pyzender
+sudo cp agent.py /var/lib/pyzender/agent.py
+
+echo 'Copy pyzender configuration file to /etc/pyzender/pyzender.conf'
+sudo mkdir /etc/pyzender
+sudo cp pyzender.conf /etc/pyzender/pyzender.conf
 
 export PYTHON3_PATH=$(which python3)
 
@@ -20,7 +23,7 @@ After=multi-user.target
 
 [Service]
 Type=simple
-ExecStart=${PYTHON3_PATH} /opt/pyzender/agent.py >> /dev/null
+ExecStart=${PYTHON3_PATH} /var/lib/pyzender/agent.py >> /dev/null
 Restart=on-failure
 User=${USER}
 
