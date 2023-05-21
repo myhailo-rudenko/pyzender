@@ -1,3 +1,3 @@
 from .health import Health
-from .psutil import PSUtil
+from .hwinfo import HWInfo
 from .qbit import QBittorrent

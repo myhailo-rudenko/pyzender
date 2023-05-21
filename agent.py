@@ -4,6 +4,7 @@ import inspect
 
 from pyzender import modules, Agent
 
+# TODO: Fix file permissions
 CONFIG_PATH = "/etc/pyzender/pyzender.conf"
 
 
@@ -35,8 +36,15 @@ for name, obj in inspect.getmembers(modules):
             kwargs = digits_to_int(kwargs)
 
             print(f"Arguments for '{name}' class are: {kwargs}")
-            module = obj(**kwargs)
-            agent_kwargs["modules"].append(module)
+            try:
+                module = obj(**kwargs)
+            except ModuleNotFoundError as e:
+                print(
+                    f"Dependencies for module '{name}' are not installed. Install them manually or using install.sh "
+                    "script."
+                )
+            else:
+                agent_kwargs["modules"].append(module)
             break
 
 agent = Agent(**agent_kwargs)

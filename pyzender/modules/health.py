@@ -12,8 +12,9 @@ class Health(Module):
         health = DataReport(
             items={
                 "running": 1,
-                "reports": self.agent.report_count + 1,
-                "queue": len(self.agent.report_queue)
+                "items_queue": self.agent.data_queue_size(),
+                "discovery_queue": self.agent.discovery_queue_size(),
+                "new_reports": len(self.agent.report_queue)
             },
             key="pyzender.health",
             timestamp=self.timestamp(),

@@ -1,5 +1,3 @@
-import qbittorrentapi
-
 from pyzender.modules.base import Module, DiscoveryReport, DataReport
 
 
@@ -17,7 +15,7 @@ class QBittorrent(Module):
         super(QBittorrent, self).__init__(data_interval, discovery_interval)
 
         # the Client will automatically acquire/maintain a logged-in state in line with any request.
-        self.qbt_client = qbittorrentapi.Client(
+        self.qbt_client = self.qbittorrentapi.Client(
             host=host,
             port=port,
             username=username,
@@ -30,6 +28,11 @@ class QBittorrent(Module):
         #
         # self.left_part_len = self.max_name_len // 2
         # self.right_part_len = self.max_name_len - self.left_part_len - len(self.separator)
+
+    def _import_dependencies(self):
+        import qbittorrentapi
+
+        self.qbittorrentapi = qbittorrentapi
 
     @staticmethod
     def _fix_name(torrent_name: str) -> str:

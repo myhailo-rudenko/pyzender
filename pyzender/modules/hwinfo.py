@@ -1,19 +1,22 @@
-import psutil
-
 from pyzender.modules.base import Module, DataReport, DiscoveryReport
 
 IP4_ADDRESS_FAMILY = 2
 IP6_ADDRESS_FAMILY = 10
 
 
-class PSUtil(Module):
+class HWInfo(Module):
+    def _import_dependencies(self):
+        import psutil
+
+        self.psutil = psutil
+
     @staticmethod
     def _is_disk_useful(disk: str) -> bool:
         return not any([("loop" in disk), ("dm" in disk)])
 
-    @staticmethod
-    def _get_useful_partitions() -> list:
-        disk_partitions = psutil.disk_partitions(all=False)
+    # @staticmethod
+    def _get_useful_partitions(self) -> list:
+        disk_partitions = self.psutil.disk_partitions(all=False)
         excluded_fstypes = ["squashfs"]
         return [p for p in disk_partitions if p.fstype not in excluded_fstypes]
 
@@ -33,12 +36,20 @@ class PSUtil(Module):
         self._discover_network_interfaces()
 
     def _discover_network_interfaces(self):
-        nics = [nic for nic in psutil.net_if_addrs()]
+        nics = [nic for nic in self.psutil.net_if_addrs()]
         discovery = DiscoveryReport(key="psutil.net.discovery", macros="{#NIC}", values=nics)
         self._report(discovery)
 
+    # def _discover_listen_addresses(self):
+    #     listen_addresses = []
+    #
+    #     for sconn in psutil.net_connections():
+    #         if sconn.status == "LISTEN":
+    #             listen_addresses.append("")
+    #             print(f"{sconn.laddr.ip}:{sconn.laddr.port}")
+
     def _discover_threads(self):
-        threads = [n for n in range(psutil.cpu_count())]
+        threads = [n for n in range(self.psutil.cpu_count())]
 
         discovery = DiscoveryReport(
             key="psutil.thread.discovery", macros="{#THREAD}",
@@ -58,7 +69,7 @@ class PSUtil(Module):
         self._report(discovery)
 
     def _discover_disks(self):
-        per_disk_counters = psutil.disk_io_counters(perdisk=True, nowrap=False)
+        per_disk_counters = self.psutil.disk_io_counters(perdisk=True, nowrap=False)
         disks = [d for d, _ in per_disk_counters.items() if self._is_disk_useful(d)]
 
         discovery = DiscoveryReport(
@@ -69,7 +80,7 @@ class PSUtil(Module):
         self._report(discovery)
 
     def _discover_temperature_sensors(self):
-        temperature_sensors = psutil.sensors_temperatures()
+        temperature_sensors = self.psutil.sensors_temperatures()
 
         sensors = []
         for sensor, readings in temperature_sensors.items():
@@ -84,7 +95,7 @@ class PSUtil(Module):
         self._report(discovery)
 
     def _per_nic_stats(self):
-        nic_stats = psutil.net_if_stats()
+        nic_stats = self.psutil.net_if_stats()
         timestamp = self.timestamp()
 
         for nic, stats in nic_stats.items():
@@ -98,7 +109,7 @@ class PSUtil(Module):
             self._report(data)
 
     def _per_nic_io_counters(self):
-        nic_counters = psutil.net_io_counters(pernic=True)
+        nic_counters = self.psutil.net_io_counters(pernic=True)
         timestamp = self.timestamp()
 
         for nic, counters in nic_counters.items():
@@ -116,7 +127,7 @@ class PSUtil(Module):
             self._report(data)
 
     def _per_nic_addresses(self):
-        nic_addresses = psutil.net_if_addrs()
+        nic_addresses = self.psutil.net_if_addrs()
         timestamp = self.timestamp()
 
         for nic, addresses in nic_addresses.items():
@@ -148,7 +159,7 @@ class PSUtil(Module):
                 self._report(data)
 
     def _per_cpu_usage(self):
-        per_cpu_usage = psutil.cpu_percent(percpu=True)
+        per_cpu_usage = self.psutil.cpu_percent(percpu=True)
         timestamp = self.timestamp()
 
         for index, usage in enumerate(per_cpu_usage):
@@ -161,7 +172,7 @@ class PSUtil(Module):
             self._report(data)
 
     def _per_cpu_frequency(self):
-        per_cpu_frequency = psutil.cpu_freq(percpu=True)
+        per_cpu_frequency = self.psutil.cpu_freq(percpu=True)
         timestamp = self.timestamp()
 
         for index, frequency in enumerate(per_cpu_frequency):
@@ -174,7 +185,7 @@ class PSUtil(Module):
             self._report(data)
 
     def _per_disk_counters(self):
-        per_disk_counters = psutil.disk_io_counters(perdisk=True, nowrap=False)
+        per_disk_counters = self.psutil.disk_io_counters(perdisk=True, nowrap=False)
         timestamp = self.timestamp()
 
         for disk, counters in per_disk_counters.items():
@@ -195,13 +206,13 @@ class PSUtil(Module):
                 self._report(data)
 
     def _cpu_general(self):
-        cores = psutil.cpu_count(logical=False)
-        threads = psutil.cpu_count()
-        loadavg_1_min, loadavg_5_min, loadavg_15_min = psutil.getloadavg()
-        stats = psutil.cpu_stats()
-        usage = psutil.cpu_percent()
-        frequency = psutil.cpu_freq()
-        cpu_times = psutil.cpu_times_percent()
+        cores = self.psutil.cpu_count(logical=False)
+        threads = self.psutil.cpu_count()
+        loadavg_1_min, loadavg_5_min, loadavg_15_min = self.psutil.getloadavg()
+        stats = self.psutil.cpu_stats()
+        usage = self.psutil.cpu_percent()
+        frequency = self.psutil.cpu_freq()
+        cpu_times = self.psutil.cpu_times_percent()
 
         data = DataReport(
             items={
@@ -242,8 +253,8 @@ class PSUtil(Module):
         self._per_cpu_frequency()
 
     def _memory(self):
-        memory = psutil.virtual_memory()
-        swap = psutil.swap_memory()
+        memory = self.psutil.virtual_memory()
+        swap = self.psutil.swap_memory()
 
         data = DataReport(
             items={
@@ -274,7 +285,7 @@ class PSUtil(Module):
         self._report(data)
 
     def _disks(self):
-        disk_io = psutil.disk_io_counters(nowrap=True)
+        disk_io = self.psutil.disk_io_counters(nowrap=True)
 
         data = DataReport(
             items={
@@ -297,7 +308,7 @@ class PSUtil(Module):
         timestamp = self.timestamp()
 
         for p in partitions:
-            usage = psutil.disk_usage(p.mountpoint)
+            usage = self.psutil.disk_usage(p.mountpoint)
             data = DataReport(
                 items={
                     "device": p.device,
@@ -317,7 +328,7 @@ class PSUtil(Module):
             self._report(data)
 
     def _temperature_sensors(self):
-        temperature_sensors = psutil.sensors_temperatures(fahrenheit=False)
+        temperature_sensors = self.psutil.sensors_temperatures(fahrenheit=False)
         timestamp = self.timestamp()
 
         for sensor, readings in temperature_sensors.items():
@@ -333,7 +344,7 @@ class PSUtil(Module):
                 self._report(data)
 
     def _networks(self):
-        net_io = psutil.net_io_counters()
+        net_io = self.psutil.net_io_counters()
 
         data = DataReport(
             items={

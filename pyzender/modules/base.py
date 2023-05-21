@@ -1,26 +1,42 @@
 import time
 from abc import ABC, abstractmethod
 from threading import Thread
-from typing import Optional, List, Union
-
-from pydantic import BaseModel, Field
+from typing import List, Union
 
 
-class DataReport(BaseModel):
-    items: dict
-    key: str = Field(..., description="example: 'qbittorrent.torrent'")
-    append_key: str = Field("", description="example: f'[{name}]'")
-    timestamp: int
-    hostname: Optional[str] = Field("default")
-    server: Optional[str] = Field("default")
+class DataReport:
+    def __init__(
+            self,
+            items: dict,
+            key: str,
+            timestamp: int = int(time.time()),
+            append_key: str = "",
+            hostname: str = "default",
+            server: str = "default"
+    ):
+        self.items = items
+        self.key = key
+        self.timestamp = timestamp
+        self.append_key = append_key
+        self.hostname = hostname
+        self.server = server
 
 
-class DiscoveryReport(BaseModel):
-    key: str = Field(..., description="example: 'qbittorrent.torrent.discovery'")
-    macros: str = Field(..., description="example: '{#TORRENT_NAME}'")
-    values: List[str]
-    hostname: Optional[str] = Field("default")
-    server: Optional[str] = Field("default")
+class DiscoveryReport:
+    def __init__(
+            self,
+            key: str,
+            macros: str,
+            values: List[str],
+            hostname: str = "default",
+            server: str = "default"
+    ):
+        self.key = key
+        self.macros = macros
+        self.values = values
+        self.timestamp = int(time.time())
+        self.hostname = hostname
+        self.server = server
 
 
 class Module(ABC):
@@ -34,6 +50,7 @@ class Module(ABC):
         self.agent = None
         self.data_thread = Thread(target=self._update_data, args=[int(data_interval)])
         self.discovery_thread = Thread(target=self._update_discovery, args=[int(discovery_interval)])
+        self._import_dependencies()
 
         print(f"'{self.name}' class initialized successfully.")
 
@@ -43,6 +60,9 @@ class Module(ABC):
 
     @abstractmethod
     def _collect_discovery_reports(self) -> None:
+        pass
+
+    def _import_dependencies(self) -> None:
         pass
 
     @staticmethod
