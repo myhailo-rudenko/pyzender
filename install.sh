@@ -16,11 +16,13 @@ if $install; then
   fi
 
   echo "Repository: https://github.com/myhailo-rudenko/pyzender"
-  echo "Tags:" && curl -sL https://api.github.com/repos/myhailo-rudenko/pyzender/tags | jq -r ".[].name"
+  REPO_TAGS=$(curl -sL https://api.github.com/repos/myhailo-rudenko/pyzender/tags | jq -r ".[].name")
+  echo "Tags:" && echo "$REPO_TAGS"
   read -p "What tag do you want to download from GitHub repo?: " repo_tag
 
   wget --progress=bar --continue --directory-prefix=$DOWNLOAD_DIR https://github.com/myhailo-rudenko/pyzender/archive/refs/tags/$repo_tag.tar.gz
-  PKG_DIR="$DOWNLOAD_DIR/$(tar xvf $DOWNLOAD_DIR/$repo_tag.tar.gz --directory $DOWNLOAD_DIR | head -n 1)"
+  TAR_STDOUT=$(tar xvf $DOWNLOAD_DIR/$repo_tag.tar.gz --directory $DOWNLOAD_DIR)
+  PKG_DIR=$DOWNLOAD_DIR/$(echo "$TAR_STDOUT" | head -n 1)
   pip install $PKG_DIR
 
   read -p "Pyzender require zabbix-sender binary to be installed. Do you want it to install now? [Y/n]: " answer
