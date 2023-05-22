@@ -15,14 +15,12 @@ if $install; then
     mkdir $DOWNLOAD_DIR
   fi
 
-  echo "Visit GitHub page to view available tags: https://github.com/myhailo-rudenko/pyzender/tags"
+  echo "Repository: https://github.com/myhailo-rudenko/pyzender"
+  echo "Tags:" && curl -sL https://api.github.com/repos/myhailo-rudenko/pyzender/tags | jq -r ".[].name"
   read -p "What tag do you want to download from GitHub repo?: " repo_tag
 
   wget --progress=bar --continue --directory-prefix=$DOWNLOAD_DIR https://github.com/myhailo-rudenko/pyzender/archive/refs/tags/$repo_tag.tar.gz
-  tar xvf $DOWNLOAD_DIR/$repo_tag.tar.gz --directory $DOWNLOAD_DIR
-
-  PKG_DIR="$DOWNLOAD_DIR/pyzender-$repo_tag"
-  echo $PKG_DIR
+  PKG_DIR="$DOWNLOAD_DIR/$(tar xvf $DOWNLOAD_DIR/$repo_tag.tar.gz --directory $DOWNLOAD_DIR | head -n 1)"
   pip install $PKG_DIR
 
   read -p "Pyzender require zabbix-sender binary to be installed. Do you want it to install now? [Y/n]: " answer
@@ -96,4 +94,6 @@ if $install; then
   sudo systemctl daemon-reload
   sudo systemctl enable pyzender.service
   sudo systemctl restart pyzender.service
+
+  rm $PKG_DIR -rf
 fi
