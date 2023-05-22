@@ -18,7 +18,7 @@ class Agent:
             debug_mode: int = 0,
             queue_lookup_interval: int = 1,
             queue_update_interval: int = 1,
-            queue_send_size: int = 250,
+            queue_send_size: int = 150,
             keep_last_items: int = 10000,
             keep_last_discovery: int = 100,
     ):
@@ -33,7 +33,7 @@ class Agent:
         self.sender_path = sender_path
         self.queue_lookup_interval = queue_lookup_interval
         self.queue_update_interval = queue_update_interval
-        self.queue_send_size = queue_send_size if 0 < queue_send_size <= 250 else 250
+        self.queue_send_size = queue_send_size if 0 < queue_send_size <= 150 else 150
         self.keep_last_items = keep_last_items if 1000 < keep_last_items else 1000
         self.keep_last_discovery = keep_last_discovery if 10 < keep_last_discovery else 10
         self.modules = modules
@@ -47,7 +47,7 @@ class Agent:
 
     def _send_data(self, this_is_data_queue: bool = False):
         """
-        Communicate with Zabbix Sender process (up to 250 values in one connection)
+        Communicate with Zabbix Sender process (up to 150 values in one connection)
         """
         if this_is_data_queue:
             queue = self.data_queue
