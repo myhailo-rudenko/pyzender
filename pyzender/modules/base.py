@@ -12,6 +12,7 @@ class DataReport:
             timestamp: int = int(time.time()),
             append_key: str = "",
             hostname: str = "default",
+            port: str = "default",
             server: str = "default"
     ):
         self.items = items
@@ -19,6 +20,7 @@ class DataReport:
         self.timestamp = timestamp
         self.append_key = append_key
         self.hostname = hostname
+        self.port = port
         self.server = server
 
 
@@ -29,6 +31,7 @@ class DiscoveryReport:
             macros: str,
             values: List[str],
             hostname: str = "default",
+            port: str = "default",
             server: str = "default"
     ):
         self.key = key
@@ -36,6 +39,7 @@ class DiscoveryReport:
         self.values = values
         self.timestamp = int(time.time())
         self.hostname = hostname
+        self.port = port
         self.server = server
 
 
@@ -45,12 +49,15 @@ class Module(ABC):
             data_interval: int = 60,
             discovery_interval: int = 300,
     ):
-        self.name = self.__class__.__name__
-        self.done = False
+        self.name = self.__class__.__name__.lower()
         self.agent = None
-        self.data_thread = Thread(target=self._update_data, args=[int(data_interval)])
-        self.discovery_thread = Thread(target=self._update_discovery, args=[int(discovery_interval)])
+        self.running = False
+        self.data_interval = int(data_interval)
+        self.discovery_interval = int(discovery_interval)
+        self.data_thread = Thread(target=self._update_data, args=[])
+        self.discovery_thread = Thread(target=self._update_discovery, args=[])
         self._import_dependencies()
+        self.config = {}
 
         print(f"'{self.name}' class initialized successfully.")
 
@@ -81,17 +88,17 @@ class Module(ABC):
         )
         self._report(exception)
 
-    def _update_data(self, data_interval: int):
-        while not self.done:
-            time.sleep(data_interval)
+    def _update_data(self):
+        while True:
+            time.sleep(self.data_interval)
             try:
                 self._collect_data_reports()
             except Exception as msg:
                 self._report_exception(str(msg))
 
-    def _update_discovery(self, discovery_interval: int):
-        while not self.done:
-            time.sleep(discovery_interval)
+    def _update_discovery(self):
+        while True:
+            time.sleep(self.discovery_interval)
             try:
                 self._collect_discovery_reports()
             except Exception as msg:
@@ -100,11 +107,6 @@ class Module(ABC):
     def run(self, agent):
         print(f"'{self.name}' module is running.")
         self.agent = agent
+        self.running = True
         self.discovery_thread.start()
         self.data_thread.start()
-
-    def stop(self):
-        print(f"'{self.name}' module has stopped.")
-        self.done = True
-        self.discovery_thread.join()
-        self.data_thread.join()

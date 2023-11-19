@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export SUDO=$(which $SUDO)
+
 while true; do
     read -p "Do you want to download and install the pyzender service? [Y/n]: " answer
     case $answer in
@@ -18,12 +20,18 @@ if $install; then
   echo "Repository: https://github.com/myhailo-rudenko/pyzender"
   REPO_TAGS=$(curl -sL https://api.github.com/repos/myhailo-rudenko/pyzender/tags | jq -r ".[].name")
   echo "Tags:" && echo "$REPO_TAGS"
-  read -p "What tag do you want to download from GitHub repo?: " repo_tag
+  echo "This script is compatible with tags: v0.4.*"
+  read -p "What tag do you want to download from GitHub repo?: " REPO_TAG
 
-  wget --progress=bar --continue --directory-prefix=$DOWNLOAD_DIR https://github.com/myhailo-rudenko/pyzender/archive/refs/tags/$repo_tag.tar.gz
-  TAR_STDOUT=$(tar xvf $DOWNLOAD_DIR/$repo_tag.tar.gz --directory $DOWNLOAD_DIR)
+  wget --progress=bar --continue --directory-prefix=$DOWNLOAD_DIR https://github.com/myhailo-rudenko/pyzender/archive/refs/tags/$REPO_TAG.tar.gz
+  TAR_STDOUT=$(tar xvf $DOWNLOAD_DIR/$REPO_TAG.tar.gz --directory $DOWNLOAD_DIR)
   PKG_DIR=$DOWNLOAD_DIR/$(echo "$TAR_STDOUT" | head -n 1)
+
+  $SUDO apt update && $SUDO apt install python3-venv -y
+  python3 -m venv $HOME/.virtualenvs/pyzender-${REPO_TAG}.venv
+  source $HOME/.virtualenvs/pyzender-v0.3.5.venv/bin/activate
   pip install $PKG_DIR
+  deactivate
 fi
 
 read -p "Pyzender require zabbix-sender binary to be installed. Do you want it to install now? [Y/n]: " answer
@@ -34,7 +42,7 @@ case $answer in
 esac
 
 if $install_zabbix_binary; then
-  sudo apt update && sudo apt install zabbix-sender -y
+  $SUDO apt update && $SUDO apt install zabbix-sender -y
 fi
 
 ETC_CONFIG_DIR="/etc/pyzender"
@@ -46,7 +54,7 @@ echo $ETC_CONFIG_FILE
 echo $PKG_CONFIG_FILE
 
 if ! [ -d "$ETC_CONFIG_DIR" ]; then
-  sudo mkdir $ETC_CONFIG_DIR
+  $SUDO mkdir $ETC_CONFIG_DIR
 
 elif ! [ -f "$ETC_CONFIG_FILE" ]; then
   cp $PKG_CONFIG_FILE $ETC_CONFIG_FILE
@@ -73,32 +81,32 @@ else
 fi
 
 if ! [ -d /var/lib/pyzender ]; then
-    sudo mkdir /var/lib/pyzender
+    $SUDO mkdir /var/lib/pyzender
 fi
 
-sudo cp $PKG_DIR/agent.py /var/lib/pyzender/agent.py
-export PYTHON3_PATH=$(which python3)
+export PYTHON3_VENV=$HOME/.virtualenvs/pyzender-v0.3.5.venv/bin/python
+
 bash -c 'cat << 'EOF' >/tmp/__pyzender.service
 [Unit]
 Description=pyZender service
 After=multi-user.target
 [Service]
 Type=simple
-ExecStart=${PYTHON3_PATH} /var/lib/pyzender/agent.py >> /dev/null
+ExecStart=${PYTHON3_VENV} -c "from pyzender import Agent;Agent().run(\"${ETC_CONFIG_FILE}\")" >> /dev/null
 Restart=on-failure
 User=${USER}
 [Install]
 WantedBy=multi-user.target
 EOF'
 
-sudo mv /tmp/__pyzender.service /lib/systemd/system/pyzender.service
-sudo chmod 644 /lib/systemd/system/pyzender.service
+$SUDO mv /tmp/__pyzender.service /lib/systemd/system/pyzender.service
+$SUDO chmod 644 /lib/systemd/system/pyzender.service
 
 echo "Service deployed to /lib/systemd/system/pyzender.service"
 
-sudo systemctl daemon-reload
-sudo systemctl enable pyzender.service
-sudo systemctl restart pyzender.service
+$SUDO systemctl daemon-reload
+$SUDO systemctl enable pyzender.service
+$SUDO systemctl restart pyzender.service
 
 rm $PKG_DIR -rf
 
