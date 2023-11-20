@@ -25,7 +25,7 @@ class AgentConfig(BaseModel):
     zabbix_address - The IP address of the Zabbix Server or Zabbix Proxy.
     sender_path - Path to the zabbix_sender binary
     """
-    hostname: str = Field(..., regex="^[0-9A-za-z\.\s_-]+$", ge=1, le=128)
+    hostname: str = Field(..., pattern=r"^[0-9A-za-z\.\s_-]+$", ge=1, le=128)
     zabbix_server_host: IPv4Address
     zabbix_server_port: int = Field(10051, ge=1024, lt=32767)
     zabbix_sender: str = Field(shutil.which("zabbix_sender"))
@@ -210,7 +210,7 @@ class Agent:
                     new_module = find_module_by_name(module_name, **{param_name: param_value})
                     if new_module:
                         self.modules.append(new_module)
-                
+
                 # update an argument for an existing module
                 else:
                     for module in self.modules:
