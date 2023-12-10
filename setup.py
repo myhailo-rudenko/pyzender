@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="pyZender",
-    version="0.4.0-dev-2",
+    version="0.4.0-dev-3",
     description="Simple agent to send data via Zabbix Sender binary",
     author="Myhailo Rudenko",
     author_email="myhailo.rudenko@gmail.com",
