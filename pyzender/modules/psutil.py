@@ -4,7 +4,7 @@ IP4_ADDRESS_FAMILY = 2
 IP6_ADDRESS_FAMILY = 10
 
 
-class HWInfo(Module):
+class PSUtil(Module):
     def _import_dependencies(self):
         import psutil
 

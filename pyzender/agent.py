@@ -9,7 +9,6 @@ import subprocess
 import sys
 import time
 from ast import literal_eval
-from ipaddress import IPv4Address
 from threading import Thread
 
 from pydantic import BaseModel, Field
@@ -26,7 +25,7 @@ class AgentConfig(BaseModel):
     sender_path - Path to the zabbix_sender binary
     """
     hostname: str = Field(..., pattern=r"^[0-9A-za-z\.\s_-]+$")
-    zabbix_server_host: IPv4Address
+    zabbix_server_host: str
     zabbix_server_port: int = Field(10051, ge=1024, lt=32767)
     zabbix_sender: str = Field(shutil.which("zabbix_sender"))
     queue_lookup_interval: int = Field(1, ge=1, le=600)
@@ -66,16 +65,15 @@ class Agent:
         self.modules = []
         self._read_config_file(path=config_path)
 
-        self.modules_by_name = []
         self.report_queue = []
-        self.report_count = 0
-
         self.data_queue = {}
         self.discovery_queue = {}
 
         self.data_thread = Thread(target=self._data_thread)
         self.discovery_thread = Thread(target=self._discovery_thread)
         self.sync_modules_thread = Thread(target=self._sync_modules_thread)
+
+        self.sent_lines = 0
 
     def _read_config_file(self, path: str):
         print(f"Reading configuration from: {path}")
@@ -86,7 +84,8 @@ class Agent:
         for section in config_file.sections():
             module_kwargs = configfile_to_dict(config_file, section)
             module = find_module_by_name(section, **module_kwargs)
-            self.modules.append(module)
+            if module:
+                self.modules.append(module)
 
     def _send_data(self, this_is_data_queue: bool = False):
         """
@@ -133,6 +132,7 @@ class Agent:
                     del data_lines[0:self.config.queue_send_size]
                     if self.config.debug_mode:
                         print(f"Send data to {group}: \n{sender_data}")
+                    self.sent_lines += len(data_portion)
 
                 data_queue_is_full_enough = len(data_lines) >= self.config.queue_send_size
                 it_has_at_least_one_item = len(data_lines) > 0
@@ -220,7 +220,7 @@ class Agent:
 
         for module in self.modules:
             if not module.running:
-                module.run()
+                module.run(agent=self)
 
     def _data_thread(self) -> None:
         print(f"Starting thread for sending items data.")

@@ -1,33 +1,25 @@
 zabbix_export:
   version: '5.4'
-  date: '2023-02-20T13:18:04Z'
+  date: '2023-12-20T11:39:25Z'
   groups:
-    -
-      uuid: 7df96b18c230490a9a0a9e2307226338
+    - uuid: 7df96b18c230490a9a0a9e2307226338
       name: Templates
   templates:
-    -
-      uuid: ea2614bcea2e4fdd8f3b8de8a3bae28e
+    - uuid: ea2614bcea2e4fdd8f3b8de8a3bae28e
       template: 'OS Linux - Python Agent'
       name: 'OS Linux - Python Agent'
       templates:
-        -
-          name: 'OS Linux - Python Agent - Psutil Module'
-        -
-          name: 'OS Linux - Python Agent - Pyzender Health Module'
+        - name: 'OS Linux - Python Agent - Psutil Module'
+        - name: 'OS Linux - Python Agent - Pyzender Health Module'
       groups:
-        -
-          name: Templates
-    -
-      uuid: e140d70bb077440db215a682f28f5a53
+        - name: Templates
+    - uuid: e140d70bb077440db215a682f28f5a53
       template: 'OS Linux - Python Agent - Psutil Module'
       name: 'OS Linux - Python Agent - Psutil Module'
       groups:
-        -
-          name: Templates
+        - name: Templates
       items:
-        -
-          uuid: 209e1a6d10ac42ef811d32a8687d9f5c
+        - uuid: 209e1a6d10ac42ef811d32a8687d9f5c
           name: 'CPU: cores'
           type: TRAP
           key: psutil.cpu.cores
@@ -35,12 +27,10 @@ zabbix_export:
           history: 7d
           description: 'The number of physical cores in the system'
           preprocessing:
-            -
-              type: DISCARD_UNCHANGED
+            - type: DISCARD_UNCHANGED
               parameters:
                 - ''
-        -
-          uuid: 0afacca530f34f8da54ff5c0897a56b4
+        - uuid: 0afacca530f34f8da54ff5c0897a56b4
           name: 'CPU: context switches'
           type: TRAP
           key: psutil.cpu.ctx_switches
@@ -52,12 +42,10 @@ zabbix_export:
             
             The Context switching is a technique or method used by the operating system to switch a process from one state to another to execute its function using CPUs in the system. When switching perform in the system, it stores the old running process's status in the form of registers and assigns the CPU to a new process to execute its tasks.
           preprocessing:
-            -
-              type: CHANGE_PER_SECOND
+            - type: CHANGE_PER_SECOND
               parameters:
                 - ''
-        -
-          uuid: f0f8651887144bc3a4c7c1badd7477bc
+        - uuid: f0f8651887144bc3a4c7c1badd7477bc
           name: 'CPU: current frequency'
           type: TRAP
           key: psutil.cpu.frequency.current
@@ -66,16 +54,13 @@ zabbix_export:
           value_type: FLOAT
           units: Hz
           preprocessing:
-            -
-              type: MULTIPLIER
+            - type: MULTIPLIER
               parameters:
                 - '1000000'
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 9e588e59fbb94d09b34f7b6fb2ee1f99
+        - uuid: 9e588e59fbb94d09b34f7b6fb2ee1f99
           name: 'CPU: max. frequency'
           type: TRAP
           key: psutil.cpu.frequency.max
@@ -84,16 +69,13 @@ zabbix_export:
           value_type: FLOAT
           units: Hz
           preprocessing:
-            -
-              type: MULTIPLIER
+            - type: MULTIPLIER
               parameters:
                 - '1000000'
-            -
-              type: DISCARD_UNCHANGED
+            - type: DISCARD_UNCHANGED
               parameters:
                 - ''
-        -
-          uuid: 607f3ef0ba474cfba7c7c0eb50a4b7e3
+        - uuid: 607f3ef0ba474cfba7c7c0eb50a4b7e3
           name: 'CPU: min. frequency'
           type: TRAP
           key: psutil.cpu.frequency.min
@@ -102,16 +84,13 @@ zabbix_export:
           value_type: FLOAT
           units: Hz
           preprocessing:
-            -
-              type: MULTIPLIER
+            - type: MULTIPLIER
               parameters:
                 - '1000000'
-            -
-              type: DISCARD_UNCHANGED
+            - type: DISCARD_UNCHANGED
               parameters:
                 - ''
-        -
-          uuid: 25e1a617575042e4a8d53c95b97d8f87
+        - uuid: 25e1a617575042e4a8d53c95b97d8f87
           name: 'CPU: interrupts'
           type: TRAP
           key: psutil.cpu.interrupts
@@ -123,12 +102,10 @@ zabbix_export:
             
             An interrupt is a signal from a device attached to a computer or from a program within the computer that requires the operating system to stop and figure out what to do next. Whenever an interrupt occurs, it causes the CPU to stop executing the current program.
           preprocessing:
-            -
-              type: CHANGE_PER_SECOND
+            - type: CHANGE_PER_SECOND
               parameters:
                 - ''
-        -
-          uuid: 5cf2527527d94fd48ba4fd5953712746
+        - uuid: 5cf2527527d94fd48ba4fd5953712746
           name: 'CPU: loadavg 1m'
           type: TRAP
           key: psutil.cpu.loadavg.1min
@@ -136,8 +113,7 @@ zabbix_export:
           history: 7d
           value_type: FLOAT
           description: 'The number of processes in the system run queue averaged over the last 1 minute'
-        -
-          uuid: b03868425c3448ccbae038d45df8ae39
+        - uuid: b03868425c3448ccbae038d45df8ae39
           name: 'CPU: loadavg 5m'
           type: TRAP
           key: psutil.cpu.loadavg.5min
@@ -145,8 +121,7 @@ zabbix_export:
           history: 7d
           value_type: FLOAT
           description: 'The number of processes in the system run queue averaged over the last 5 minutes'
-        -
-          uuid: 95cfd25f24f3461e8b6201c496a77caa
+        - uuid: 95cfd25f24f3461e8b6201c496a77caa
           name: 'CPU: loadavg 15m'
           type: TRAP
           key: psutil.cpu.loadavg.15min
@@ -154,27 +129,23 @@ zabbix_export:
           history: 7d
           value_type: FLOAT
           description: 'The number of processes in the system run queue averaged over the last 15 minutes'
-        -
-          uuid: 6b9edd95bca249bb8327c688828d3bff
+        - uuid: 6b9edd95bca249bb8327c688828d3bff
           name: 'CPU: soft interrupts'
           type: TRAP
           key: psutil.cpu.soft_interrupts
           delay: '0'
           history: 7d
-        -
-          uuid: 31d9b457daf4431690cda6f501fbe0b5
+        - uuid: 31d9b457daf4431690cda6f501fbe0b5
           name: 'CPU: system calls'
           type: TRAP
           key: psutil.cpu.sys_calls
           delay: '0'
           history: 7d
           preprocessing:
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: dd3177f592604d5b99fbe8ba0a6db898
+        - uuid: dd3177f592604d5b99fbe8ba0a6db898
           name: 'CPU: threads'
           type: TRAP
           key: psutil.cpu.threads
@@ -182,12 +153,10 @@ zabbix_export:
           history: 7d
           description: 'The number of logical threads in the system'
           preprocessing:
-            -
-              type: DISCARD_UNCHANGED
+            - type: DISCARD_UNCHANGED
               parameters:
                 - ''
-        -
-          uuid: d43524aa4ff94dbbb671d2fbab059138
+        - uuid: d43524aa4ff94dbbb671d2fbab059138
           name: 'CPU times: guest'
           type: TRAP
           key: psutil.cpu.times.guest
@@ -196,12 +165,10 @@ zabbix_export:
           value_type: FLOAT
           units: '%'
           preprocessing:
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: a9738bd4dbc8430399b85cab0e52dd7e
+        - uuid: a9738bd4dbc8430399b85cab0e52dd7e
           name: 'CPU times: guest_nice'
           type: TRAP
           key: psutil.cpu.times.guest_nice
@@ -210,12 +177,10 @@ zabbix_export:
           value_type: FLOAT
           units: '%'
           preprocessing:
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: d08cb61368f941ea84c3755d21fbf6ed
+        - uuid: d08cb61368f941ea84c3755d21fbf6ed
           name: 'CPU times: idle'
           type: TRAP
           key: psutil.cpu.times.idle
@@ -224,12 +189,10 @@ zabbix_export:
           value_type: FLOAT
           units: '%'
           preprocessing:
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: adc87169662540d5bac2d8d3e7440f63
+        - uuid: adc87169662540d5bac2d8d3e7440f63
           name: 'CPU times: iowait'
           type: TRAP
           key: psutil.cpu.times.iowait
@@ -238,12 +201,10 @@ zabbix_export:
           value_type: FLOAT
           units: '%'
           preprocessing:
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 43f005736e104d6c8d53dbf6904de485
+        - uuid: 43f005736e104d6c8d53dbf6904de485
           name: 'CPU times: irq'
           type: TRAP
           key: psutil.cpu.times.irq
@@ -252,12 +213,10 @@ zabbix_export:
           value_type: FLOAT
           units: '%'
           preprocessing:
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 50495d13c464444487d23b2fa2a5e552
+        - uuid: 50495d13c464444487d23b2fa2a5e552
           name: 'CPU times: nice'
           type: TRAP
           key: psutil.cpu.times.nice
@@ -266,12 +225,10 @@ zabbix_export:
           value_type: FLOAT
           units: '%'
           preprocessing:
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 7aa130acc39444d982643980864f22fa
+        - uuid: 7aa130acc39444d982643980864f22fa
           name: 'CPU times: softirq'
           type: TRAP
           key: psutil.cpu.times.softirq
@@ -280,12 +237,10 @@ zabbix_export:
           value_type: FLOAT
           units: '%'
           preprocessing:
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 635ba71676a24c74bfe79698f556e0ca
+        - uuid: 635ba71676a24c74bfe79698f556e0ca
           name: 'CPU times: steal'
           type: TRAP
           key: psutil.cpu.times.steal
@@ -294,12 +249,10 @@ zabbix_export:
           value_type: FLOAT
           units: '%'
           preprocessing:
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: b57be887e103435b9ce14362938e18fd
+        - uuid: b57be887e103435b9ce14362938e18fd
           name: 'CPU times: system'
           type: TRAP
           key: psutil.cpu.times.system
@@ -308,12 +261,10 @@ zabbix_export:
           value_type: FLOAT
           units: '%'
           preprocessing:
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 12ea8881c4f4455bb82b93398639ce89
+        - uuid: 12ea8881c4f4455bb82b93398639ce89
           name: 'CPU times: user'
           type: TRAP
           key: psutil.cpu.times.user
@@ -322,12 +273,10 @@ zabbix_export:
           value_type: FLOAT
           units: '%'
           preprocessing:
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 8d375dce3f5146ca893d8992d50b1d9c
+        - uuid: 8d375dce3f5146ca893d8992d50b1d9c
           name: 'CPU: usage'
           type: TRAP
           key: psutil.cpu.usage
@@ -335,8 +284,7 @@ zabbix_export:
           history: 7d
           value_type: FLOAT
           units: '%'
-        -
-          uuid: 7b624a2769f54ef9b171bb1c84ba2758
+        - uuid: 7b624a2769f54ef9b171bb1c84ba2758
           name: 'CPU: usage (calc)'
           type: CALCULATED
           key: psutil.cpu.usage.calc
@@ -346,12 +294,10 @@ zabbix_export:
           units: '%'
           params: last(//psutil.cpu.usage)
           preprocessing:
-            -
-              type: DISCARD_UNCHANGED
+            - type: DISCARD_UNCHANGED
               parameters:
                 - ''
-        -
-          uuid: f9551a0e865a46b990b7b4890ce8a314
+        - uuid: f9551a0e865a46b990b7b4890ce8a314
           name: 'Disks: read bytes'
           type: TRAP
           key: psutil.disk.read_bytes
@@ -359,16 +305,13 @@ zabbix_export:
           history: 7d
           units: B/s
           preprocessing:
-            -
-              type: CHANGE_PER_SECOND
+            - type: CHANGE_PER_SECOND
               parameters:
                 - ''
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 1e64f6215b2c446c8d5b981ee6c90cf3
+        - uuid: 1e64f6215b2c446c8d5b981ee6c90cf3
           name: 'Disks: read IOPS'
           type: TRAP
           key: psutil.disk.read_count
@@ -376,16 +319,13 @@ zabbix_export:
           history: 7d
           units: iops
           preprocessing:
-            -
-              type: CHANGE_PER_SECOND
+            - type: CHANGE_PER_SECOND
               parameters:
                 - ''
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 51494fbdea574194a258c4923a3bfa71
+        - uuid: 51494fbdea574194a258c4923a3bfa71
           name: 'Disks: read time'
           type: TRAP
           key: psutil.disk.read_time
@@ -393,16 +333,13 @@ zabbix_export:
           history: 7d
           units: ms/s
           preprocessing:
-            -
-              type: CHANGE_PER_SECOND
+            - type: CHANGE_PER_SECOND
               parameters:
                 - ''
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 517552f276d14ec9a0716328ae04c36d
+        - uuid: 517552f276d14ec9a0716328ae04c36d
           name: 'Disks: write bytes'
           type: TRAP
           key: psutil.disk.write_bytes
@@ -410,16 +347,13 @@ zabbix_export:
           history: 7d
           units: B/s
           preprocessing:
-            -
-              type: CHANGE_PER_SECOND
+            - type: CHANGE_PER_SECOND
               parameters:
                 - ''
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 04fbb037e5c04889a152d9a24ebb206d
+        - uuid: 04fbb037e5c04889a152d9a24ebb206d
           name: 'Disks: write IOPS'
           type: TRAP
           key: psutil.disk.write_count
@@ -427,16 +361,13 @@ zabbix_export:
           history: 7d
           units: iops
           preprocessing:
-            -
-              type: CHANGE_PER_SECOND
+            - type: CHANGE_PER_SECOND
               parameters:
                 - ''
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 04e81c3cd9e2416ea1a91813bef4e784
+        - uuid: 04e81c3cd9e2416ea1a91813bef4e784
           name: 'Disks: write time'
           type: TRAP
           key: psutil.disk.write_time
@@ -444,16 +375,13 @@ zabbix_export:
           history: 7d
           units: ms/s
           preprocessing:
-            -
-              type: CHANGE_PER_SECOND
+            - type: CHANGE_PER_SECOND
               parameters:
                 - ''
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 19775e28664a4961b6609196a6329148
+        - uuid: 19775e28664a4961b6609196a6329148
           name: 'Memory: active'
           type: TRAP
           key: psutil.memory.active
@@ -461,8 +389,7 @@ zabbix_export:
           history: 7d
           units: B
           description: 'Memory currently in use or very recently used, and so it is in RAM.'
-        -
-          uuid: 0139af55f2fe4756be4d8a8881720596
+        - uuid: 0139af55f2fe4756be4d8a8881720596
           name: 'Memory: available'
           type: TRAP
           key: psutil.memory.available
@@ -473,8 +400,7 @@ zabbix_export:
             The memory that can be given instantly to processes without the system going into swap.                                                                                            
             
             This is calculated by summing different memory values depending on the platform and it is supposed to be used to monitor actual memory usage in a cross platform fashion.
-        -
-          uuid: 510abe85cbfe451b8cb021000ee2aa69
+        - uuid: 510abe85cbfe451b8cb021000ee2aa69
           name: 'Memory: buffers'
           type: TRAP
           key: psutil.memory.buffers
@@ -482,8 +408,7 @@ zabbix_export:
           history: 7d
           units: B
           description: 'Cache for things like file system metadata.'
-        -
-          uuid: 715b765e4aae472e836f421820e05b80
+        - uuid: 715b765e4aae472e836f421820e05b80
           name: 'Memory: cached'
           type: TRAP
           key: psutil.memory.cached
@@ -491,8 +416,7 @@ zabbix_export:
           history: 7d
           units: B
           description: 'Cache for various things.'
-        -
-          uuid: 7105788471c04451886f44de546c0adf
+        - uuid: 7105788471c04451886f44de546c0adf
           name: 'Memory: free'
           type: TRAP
           key: psutil.memory.free
@@ -503,8 +427,7 @@ zabbix_export:
             Memory not being used at all (zeroed) that is readily available;
             Note that this doesn't reflect the actual memory available.
             (use 'available' instead)
-        -
-          uuid: c7078243fa28405a8086ed7c7735e350
+        - uuid: c7078243fa28405a8086ed7c7735e350
           name: 'Memory: inactive'
           type: TRAP
           key: psutil.memory.inactive
@@ -512,8 +435,7 @@ zabbix_export:
           history: 7d
           units: B
           description: 'Memory that is marked as not used.'
-        -
-          uuid: 5ddba02da448441689c8af478ec3111e
+        - uuid: 5ddba02da448441689c8af478ec3111e
           name: 'Memory: usage'
           type: TRAP
           key: psutil.memory.percent
@@ -523,12 +445,10 @@ zabbix_export:
           units: '%'
           description: 'The percentage usage calculated as (total - available) / total * 100'
           preprocessing:
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 45be09af180a489eb192243a26f31de3
+        - uuid: 45be09af180a489eb192243a26f31de3
           name: 'Memory: shared'
           type: TRAP
           key: psutil.memory.shared
@@ -536,8 +456,7 @@ zabbix_export:
           history: 7d
           units: B
           description: 'Memory that may be simultaneously accessed by multiple processes.'
-        -
-          uuid: f8858d4fd56b41cd80fedfb1553a6c4d
+        - uuid: f8858d4fd56b41cd80fedfb1553a6c4d
           name: 'Memory: total'
           type: TRAP
           key: psutil.memory.total
@@ -545,8 +464,7 @@ zabbix_export:
           history: 7d
           units: B
           description: 'Total physical memory available'
-        -
-          uuid: aca8602773c64fe98c23f2c4deeeb80d
+        - uuid: aca8602773c64fe98c23f2c4deeeb80d
           name: 'Memory: used'
           type: TRAP
           key: psutil.memory.used
@@ -558,8 +476,7 @@ zabbix_export:
               - macOS: active + wired
               - BSD: active + wired + cached
               - Linux: total - free
-        -
-          uuid: 8e77460957ec41029e1ed9b0c1daecca
+        - uuid: 8e77460957ec41029e1ed9b0c1daecca
           name: 'Network: byte receive rate'
           type: TRAP
           key: psutil.net.bytes_recv
@@ -567,16 +484,13 @@ zabbix_export:
           history: 7d
           units: B/s
           preprocessing:
-            -
-              type: CHANGE_PER_SECOND
+            - type: CHANGE_PER_SECOND
               parameters:
                 - ''
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 6b01d02cc47d4859bda413a2a950eb7c
+        - uuid: 6b01d02cc47d4859bda413a2a950eb7c
           name: 'Network: byte send rate'
           type: TRAP
           key: psutil.net.bytes_sent
@@ -584,16 +498,13 @@ zabbix_export:
           history: 7d
           units: B/s
           preprocessing:
-            -
-              type: CHANGE_PER_SECOND
+            - type: CHANGE_PER_SECOND
               parameters:
                 - ''
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 12687520f0734298adef877fb68ec9ff
+        - uuid: 12687520f0734298adef877fb68ec9ff
           name: 'Network: drop in'
           type: TRAP
           key: psutil.net.dropin
@@ -602,16 +513,13 @@ zabbix_export:
           units: drop/s
           description: 'The number of dropped incoming packets per second'
           preprocessing:
-            -
-              type: CHANGE_PER_SECOND
+            - type: CHANGE_PER_SECOND
               parameters:
                 - ''
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: cf4871dcdb44448fa27e2b0fec7a3106
+        - uuid: cf4871dcdb44448fa27e2b0fec7a3106
           name: 'Network: drop out'
           type: TRAP
           key: psutil.net.dropout
@@ -620,16 +528,13 @@ zabbix_export:
           units: drop/s
           description: 'The number of dropped outcoming packets per second'
           preprocessing:
-            -
-              type: CHANGE_PER_SECOND
+            - type: CHANGE_PER_SECOND
               parameters:
                 - ''
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: b0c7ba761268493ebe7a5025c96b5f4a
+        - uuid: b0c7ba761268493ebe7a5025c96b5f4a
           name: 'Network: error in'
           type: TRAP
           key: psutil.net.errin
@@ -638,16 +543,13 @@ zabbix_export:
           units: error/s
           description: 'The number of errored incoming packets per second'
           preprocessing:
-            -
-              type: CHANGE_PER_SECOND
+            - type: CHANGE_PER_SECOND
               parameters:
                 - ''
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: fd9e7d32ba074aa0940dc8eb65b13eb2
+        - uuid: fd9e7d32ba074aa0940dc8eb65b13eb2
           name: 'Network: error out'
           type: TRAP
           key: psutil.net.errout
@@ -656,16 +558,13 @@ zabbix_export:
           units: error/s
           description: 'The number of errored outcoming packets per second'
           preprocessing:
-            -
-              type: CHANGE_PER_SECOND
+            - type: CHANGE_PER_SECOND
               parameters:
                 - ''
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 6e540a6014d049b1b7b42fc7b7e93a36
+        - uuid: 6e540a6014d049b1b7b42fc7b7e93a36
           name: 'Network: packet receive rate'
           type: TRAP
           key: psutil.net.packets_recv
@@ -673,16 +572,13 @@ zabbix_export:
           history: 7d
           units: packet/s
           preprocessing:
-            -
-              type: CHANGE_PER_SECOND
+            - type: CHANGE_PER_SECOND
               parameters:
                 - ''
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 51a3b9b8dc05452fb4607319da05caa8
+        - uuid: 51a3b9b8dc05452fb4607319da05caa8
           name: 'Network: packet send rate'
           type: TRAP
           key: psutil.net.packets_sent
@@ -690,16 +586,13 @@ zabbix_export:
           history: 7d
           units: packet/s
           preprocessing:
-            -
-              type: CHANGE_PER_SECOND
+            - type: CHANGE_PER_SECOND
               parameters:
                 - ''
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 9c7eb059e3fb4a6a9d25e9e134c7067c
+        - uuid: 9c7eb059e3fb4a6a9d25e9e134c7067c
           name: 'Swap: free'
           type: TRAP
           key: psutil.swap.free
@@ -708,12 +601,10 @@ zabbix_export:
           units: B
           description: 'Free swap memory in bytes.'
           preprocessing:
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: fc6552f0f9044b3598ae4be4a9fd7a20
+        - uuid: fc6552f0f9044b3598ae4be4a9fd7a20
           name: 'Swap: usage'
           type: TRAP
           key: psutil.swap.percent
@@ -723,12 +614,10 @@ zabbix_export:
           units: '%'
           description: 'The percent usage.'
           preprocessing:
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: a580f7beb01c4e73a020516f49130c01
+        - uuid: a580f7beb01c4e73a020516f49130c01
           name: 'Swapped in'
           type: TRAP
           key: psutil.swap.swapped_in
@@ -737,16 +626,13 @@ zabbix_export:
           units: B/s
           description: 'The number of bytes the system has swapped in from a disk per second.'
           preprocessing:
-            -
-              type: CHANGE_PER_SECOND
+            - type: CHANGE_PER_SECOND
               parameters:
                 - ''
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: f819714b1e404e54bdded83c81d2abfb
+        - uuid: f819714b1e404e54bdded83c81d2abfb
           name: 'Swapped out'
           type: TRAP
           key: psutil.swap.swapped_out
@@ -755,16 +641,13 @@ zabbix_export:
           units: B/s
           description: 'The number of bytes the system has swapped out from a disk per second.'
           preprocessing:
-            -
-              type: CHANGE_PER_SECOND
+            - type: CHANGE_PER_SECOND
               parameters:
                 - ''
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 6c8d0bce90cc49539fb320b35aa0f115
+        - uuid: 6c8d0bce90cc49539fb320b35aa0f115
           name: 'Swap: total'
           type: TRAP
           key: psutil.swap.total
@@ -773,12 +656,10 @@ zabbix_export:
           units: B
           description: 'Total swap memory in bytes.'
           preprocessing:
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 0ca56b38b5994db38e75c01aec1a8808
+        - uuid: 0ca56b38b5994db38e75c01aec1a8808
           name: 'Swap: used'
           type: TRAP
           key: psutil.swap.used
@@ -787,21 +668,32 @@ zabbix_export:
           units: B
           description: 'Used swap memory in bytes.'
           preprocessing:
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+        - uuid: f3b75c6872ee4130ae64cfc685538dd1
+          name: 'Psutil Module: data inteval'
+          type: ZABBIX_ACTIVE
+          key: pyzender.module.psutil.data_interval
+          delay: '5'
+          history: '0'
+          trends: '0'
+        - uuid: 575cee73d0b3476e8a2c58d65caa3e57
+          name: 'Psutil Module: discovery inteval'
+          type: ZABBIX_ACTIVE
+          key: pyzender.module.psutil.discovery_interval
+          delay: '60'
+          history: '0'
+          trends: '0'
       discovery_rules:
-        -
-          uuid: 3c3e4d363a604531a8a6c3701f64076b
+        - uuid: 3c3e4d363a604531a8a6c3701f64076b
           name: Disk
           type: TRAP
           key: psutil.disk.discovery
           delay: '0'
           lifetime: 1h
           item_prototypes:
-            -
-              uuid: 57720ad99734469b8b96e9b5b357211f
+            - uuid: 57720ad99734469b8b96e9b5b357211f
               name: '''{#DISK}'': read bytes'
               type: TRAP
               key: 'psutil.disk.read_bytes.[{#DISK}]'
@@ -809,16 +701,13 @@ zabbix_export:
               history: 7d
               units: B/s
               preprocessing:
-                -
-                  type: CHANGE_PER_SECOND
+                - type: CHANGE_PER_SECOND
                   parameters:
                     - ''
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 9676662fd72b410c829763e737dd6faf
+            - uuid: 9676662fd72b410c829763e737dd6faf
               name: '''{#DISK}'': read IOPS'
               type: TRAP
               key: 'psutil.disk.read_count.[{#DISK}]'
@@ -826,16 +715,13 @@ zabbix_export:
               history: 7d
               units: iops
               preprocessing:
-                -
-                  type: CHANGE_PER_SECOND
+                - type: CHANGE_PER_SECOND
                   parameters:
                     - ''
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 57be1015b1e4415f90401311443b1355
+            - uuid: 57be1015b1e4415f90401311443b1355
               name: '''{#DISK}'': read time'
               type: TRAP
               key: 'psutil.disk.read_time.[{#DISK}]'
@@ -844,16 +730,13 @@ zabbix_export:
               value_type: FLOAT
               units: ms/s
               preprocessing:
-                -
-                  type: CHANGE_PER_SECOND
+                - type: CHANGE_PER_SECOND
                   parameters:
                     - ''
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: aa4127919fc24b3ea7835bbc0a6e1fe8
+            - uuid: aa4127919fc24b3ea7835bbc0a6e1fe8
               name: '''{#DISK}'': write bytes'
               type: TRAP
               key: 'psutil.disk.write_bytes.[{#DISK}]'
@@ -861,16 +744,13 @@ zabbix_export:
               history: 7d
               units: B/s
               preprocessing:
-                -
-                  type: CHANGE_PER_SECOND
+                - type: CHANGE_PER_SECOND
                   parameters:
                     - ''
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 576129e4d71d4ef691cd58a9c6409483
+            - uuid: 576129e4d71d4ef691cd58a9c6409483
               name: '''{#DISK}'': write IOPS'
               type: TRAP
               key: 'psutil.disk.write_count.[{#DISK}]'
@@ -878,16 +758,13 @@ zabbix_export:
               history: 7d
               units: iops
               preprocessing:
-                -
-                  type: CHANGE_PER_SECOND
+                - type: CHANGE_PER_SECOND
                   parameters:
                     - ''
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: c08c909cf9d34885b34c45edc9e8da9a
+            - uuid: c08c909cf9d34885b34c45edc9e8da9a
               name: '''{#DISK}'': write time'
               type: TRAP
               key: 'psutil.disk.write_time.[{#DISK}]'
@@ -896,24 +773,20 @@ zabbix_export:
               value_type: FLOAT
               units: ms/s
               preprocessing:
-                -
-                  type: CHANGE_PER_SECOND
+                - type: CHANGE_PER_SECOND
                   parameters:
                     - ''
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 095600c5d7744da6b12a5158a4adb7ba
+        - uuid: 095600c5d7744da6b12a5158a4adb7ba
           name: Mountpoint
           type: TRAP
           key: psutil.mountpoint.discovery
           delay: '0'
           lifetime: 1h
           item_prototypes:
-            -
-              uuid: d345bc5b96a9477095aa913705cfe1f5
+            - uuid: d345bc5b96a9477095aa913705cfe1f5
               name: '''{#MOUNTPOINT}'': device'
               type: TRAP
               key: 'psutil.mountpoint.device.[{#MOUNTPOINT}]'
@@ -921,12 +794,10 @@ zabbix_export:
               trends: '0'
               value_type: TEXT
               preprocessing:
-                -
-                  type: DISCARD_UNCHANGED
+                - type: DISCARD_UNCHANGED
                   parameters:
                     - ''
-            -
-              uuid: a8c0d845ef014446840e973a37f8abf1
+            - uuid: a8c0d845ef014446840e973a37f8abf1
               name: '''{#MOUNTPOINT}'': fstype'
               type: TRAP
               key: 'psutil.mountpoint.fstype.[{#MOUNTPOINT}]'
@@ -934,12 +805,10 @@ zabbix_export:
               trends: '0'
               value_type: TEXT
               preprocessing:
-                -
-                  type: DISCARD_UNCHANGED
+                - type: DISCARD_UNCHANGED
                   parameters:
                     - ''
-            -
-              uuid: 230cf386b3214d81bd0bbb7294c9438d
+            - uuid: 230cf386b3214d81bd0bbb7294c9438d
               name: '''{#MOUNTPOINT}'': mount options'
               type: TRAP
               key: 'psutil.mountpoint.opts.[{#MOUNTPOINT}]'
@@ -947,12 +816,10 @@ zabbix_export:
               trends: '0'
               value_type: TEXT
               preprocessing:
-                -
-                  type: DISCARD_UNCHANGED
+                - type: DISCARD_UNCHANGED
                   parameters:
                     - ''
-            -
-              uuid: 4c94adf9e65842a3b4a458db91e6a1eb
+            - uuid: 4c94adf9e65842a3b4a458db91e6a1eb
               name: '''{#MOUNTPOINT}'': free'
               type: TRAP
               key: 'psutil.mountpoint.usage.free.[{#MOUNTPOINT}]'
@@ -960,12 +827,10 @@ zabbix_export:
               history: 7d
               units: B
               preprocessing:
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 10125834790d4f4193a2291cbefe35ca
+            - uuid: 10125834790d4f4193a2291cbefe35ca
               name: '''{#MOUNTPOINT}'': usage'
               type: TRAP
               key: 'psutil.mountpoint.usage.percent.[{#MOUNTPOINT}]'
@@ -974,12 +839,10 @@ zabbix_export:
               value_type: FLOAT
               units: '%'
               preprocessing:
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 92ca3b73d84d48948673e081561fdfcd
+            - uuid: 92ca3b73d84d48948673e081561fdfcd
               name: '''{#MOUNTPOINT}'': total'
               type: TRAP
               key: 'psutil.mountpoint.usage.total.[{#MOUNTPOINT}]'
@@ -987,12 +850,10 @@ zabbix_export:
               history: 7d
               units: B
               preprocessing:
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 606c2347ac5f4cfc88410c25c4fca205
+            - uuid: 606c2347ac5f4cfc88410c25c4fca205
               name: '''{#MOUNTPOINT}'': used'
               type: TRAP
               key: 'psutil.mountpoint.usage.used.[{#MOUNTPOINT}]'
@@ -1000,20 +861,32 @@ zabbix_export:
               history: 7d
               units: B
               preprocessing:
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: d8cc27fae8c2413ea9be38acbd21200a
+          graph_prototypes:
+            - uuid: bf7941b855c247558ceb34cf966d2131
+              name: 'Mountpoint: Usage'
+              type: STACKED
+              graph_items:
+                - sortorder: '1'
+                  color: 81D4FA
+                  item:
+                    host: 'OS Linux - Python Agent - Psutil Module'
+                    key: 'psutil.mountpoint.usage.free.[{#MOUNTPOINT}]'
+                - sortorder: '2'
+                  color: D4E157
+                  item:
+                    host: 'OS Linux - Python Agent - Psutil Module'
+                    key: 'psutil.mountpoint.usage.used.[{#MOUNTPOINT}]'
+        - uuid: d8cc27fae8c2413ea9be38acbd21200a
           name: 'Network inteface'
           type: TRAP
           key: psutil.net.discovery
           delay: '0'
           lifetime: 1h
           item_prototypes:
-            -
-              uuid: ad3b1f82d2ea493f8ae5bfae3cbcd41a
+            - uuid: ad3b1f82d2ea493f8ae5bfae3cbcd41a
               name: '{#NIC}: byte receive rate'
               type: TRAP
               key: 'psutil.net.bytes_recv.[{#NIC}]'
@@ -1021,16 +894,13 @@ zabbix_export:
               history: 7d
               units: B/s
               preprocessing:
-                -
-                  type: CHANGE_PER_SECOND
+                - type: CHANGE_PER_SECOND
                   parameters:
                     - ''
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 518946eae93b43c1ae3f5633e8406b8a
+            - uuid: 518946eae93b43c1ae3f5633e8406b8a
               name: '{#NIC}: byte send rate'
               type: TRAP
               key: 'psutil.net.bytes_sent.[{#NIC}]'
@@ -1038,16 +908,13 @@ zabbix_export:
               history: 7d
               units: B/s
               preprocessing:
-                -
-                  type: CHANGE_PER_SECOND
+                - type: CHANGE_PER_SECOND
                   parameters:
                     - ''
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 681f4355cd4c45bc8dbdf4be09be2d60
+            - uuid: 681f4355cd4c45bc8dbdf4be09be2d60
               name: '{#NIC}: drop in'
               type: TRAP
               key: 'psutil.net.dropin.[{#NIC}]'
@@ -1056,16 +923,13 @@ zabbix_export:
               units: drop/s
               description: 'The number of dropped incoming packets per second'
               preprocessing:
-                -
-                  type: CHANGE_PER_SECOND
+                - type: CHANGE_PER_SECOND
                   parameters:
                     - ''
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: d29710ab86474a46b7efd01a9545c2af
+            - uuid: d29710ab86474a46b7efd01a9545c2af
               name: '{#NIC}: drop out'
               type: TRAP
               key: 'psutil.net.dropout.[{#NIC}]'
@@ -1074,16 +938,13 @@ zabbix_export:
               units: drop/s
               description: 'The number of dropped outcoming packets per second'
               preprocessing:
-                -
-                  type: CHANGE_PER_SECOND
+                - type: CHANGE_PER_SECOND
                   parameters:
                     - ''
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 3f91a099fcd24619a32b63faaffc3c19
+            - uuid: 3f91a099fcd24619a32b63faaffc3c19
               name: '{#NIC}: duplex'
               type: TRAP
               key: 'psutil.net.duplex.[{#NIC}]'
@@ -1092,12 +953,10 @@ zabbix_export:
               valuemap:
                 name: NIC_DUPLEX
               preprocessing:
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 92fa338e651c44c79052506917fd3715
+            - uuid: 92fa338e651c44c79052506917fd3715
               name: '{#NIC}: error in'
               type: TRAP
               key: 'psutil.net.errin.[{#NIC}]'
@@ -1106,16 +965,13 @@ zabbix_export:
               units: error/s
               description: 'The number of errored incoming packets per second'
               preprocessing:
-                -
-                  type: CHANGE_PER_SECOND
+                - type: CHANGE_PER_SECOND
                   parameters:
                     - ''
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 5a684efe185242958e0d29143a2043aa
+            - uuid: 5a684efe185242958e0d29143a2043aa
               name: '{#NIC}: error out'
               type: TRAP
               key: 'psutil.net.errout.[{#NIC}]'
@@ -1124,16 +980,13 @@ zabbix_export:
               units: error/s
               description: 'The number of errored outcoming packets per second'
               preprocessing:
-                -
-                  type: CHANGE_PER_SECOND
+                - type: CHANGE_PER_SECOND
                   parameters:
                     - ''
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 75605807d6a640919bc38b0512859ced
+            - uuid: 75605807d6a640919bc38b0512859ced
               name: '{#NIC}: ip4 address'
               type: TRAP
               key: 'psutil.net.ip4.address.[{#NIC}]'
@@ -1142,12 +995,10 @@ zabbix_export:
               trends: '0'
               value_type: TEXT
               preprocessing:
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 4c6cb1e854a143cbaa5611868f5d5d4c
+            - uuid: 4c6cb1e854a143cbaa5611868f5d5d4c
               name: '{#NIC}: ip4 broadcast'
               type: TRAP
               key: 'psutil.net.ip4.broadcast.[{#NIC}]'
@@ -1156,12 +1007,10 @@ zabbix_export:
               trends: '0'
               value_type: TEXT
               preprocessing:
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 78e07e68a2234333a55bff59e59ee1de
+            - uuid: 78e07e68a2234333a55bff59e59ee1de
               name: '{#NIC}: ip4 netmask'
               type: TRAP
               key: 'psutil.net.ip4.netmask.[{#NIC}]'
@@ -1170,12 +1019,10 @@ zabbix_export:
               trends: '0'
               value_type: TEXT
               preprocessing:
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 74440330a3ed4e8f8baf6765637cbfc2
+            - uuid: 74440330a3ed4e8f8baf6765637cbfc2
               name: '{#NIC}: ip4 ptp'
               type: TRAP
               key: 'psutil.net.ip4.ptp.[{#NIC}]'
@@ -1184,12 +1031,10 @@ zabbix_export:
               trends: '0'
               value_type: TEXT
               preprocessing:
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 60d454e8dc6843239ebf1e4de6d76e25
+            - uuid: 60d454e8dc6843239ebf1e4de6d76e25
               name: '{#NIC}: ip6 address'
               type: TRAP
               key: 'psutil.net.ip6.address.[{#NIC}]'
@@ -1198,12 +1043,10 @@ zabbix_export:
               trends: '0'
               value_type: TEXT
               preprocessing:
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 0b581f1fb3ef490ca0c67e0a85a31957
+            - uuid: 0b581f1fb3ef490ca0c67e0a85a31957
               name: '{#NIC}: ip6 broadcast'
               type: TRAP
               key: 'psutil.net.ip6.broadcast.[{#NIC}]'
@@ -1212,12 +1055,10 @@ zabbix_export:
               trends: '0'
               value_type: TEXT
               preprocessing:
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: ddf289260e8a45a5bfdf7b76e2178177
+            - uuid: ddf289260e8a45a5bfdf7b76e2178177
               name: '{#NIC}: ip6 netmask'
               type: TRAP
               key: 'psutil.net.ip6.netmask.[{#NIC}]'
@@ -1226,12 +1067,10 @@ zabbix_export:
               trends: '0'
               value_type: TEXT
               preprocessing:
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 2fea3e551a034e62a976a853b2b44f42
+            - uuid: 2fea3e551a034e62a976a853b2b44f42
               name: '{#NIC}: ip6 ptp'
               type: TRAP
               key: 'psutil.net.ip6.ptp.[{#NIC}]'
@@ -1240,12 +1079,10 @@ zabbix_export:
               trends: '0'
               value_type: TEXT
               preprocessing:
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 420ac491fdc542a5bfdde0ba37d334cd
+            - uuid: 420ac491fdc542a5bfdde0ba37d334cd
               name: '{#NIC}: state'
               type: TRAP
               key: 'psutil.net.isup.[{#NIC}]'
@@ -1254,24 +1091,20 @@ zabbix_export:
               valuemap:
                 name: UP_DOWN
               preprocessing:
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 861ddd3224a6473484a6a6abcff55fed
+            - uuid: 861ddd3224a6473484a6a6abcff55fed
               name: '{#NIC}: mtu'
               type: TRAP
               key: 'psutil.net.mtu.[{#NIC}]'
               delay: '0'
               history: 7d
               preprocessing:
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 8092f51fb02a46f9b386346bafcaaa27
+            - uuid: 8092f51fb02a46f9b386346bafcaaa27
               name: '{#NIC}: packet receive rate'
               type: TRAP
               key: 'psutil.net.packets_recv.[{#NIC}]'
@@ -1279,16 +1112,13 @@ zabbix_export:
               history: 7d
               units: packet/s
               preprocessing:
-                -
-                  type: CHANGE_PER_SECOND
+                - type: CHANGE_PER_SECOND
                   parameters:
                     - ''
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 7c817f2db0e4476ba32fc07e6b832ae6
+            - uuid: 7c817f2db0e4476ba32fc07e6b832ae6
               name: '{#NIC}: packet send rate'
               type: TRAP
               key: 'psutil.net.packets_sent.[{#NIC}]'
@@ -1296,16 +1126,13 @@ zabbix_export:
               history: 7d
               units: packet/s
               preprocessing:
-                -
-                  type: CHANGE_PER_SECOND
+                - type: CHANGE_PER_SECOND
                   parameters:
                     - ''
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-            -
-              uuid: 09f49498a34f42c28eb1b1955a32e8c6
+            - uuid: 09f49498a34f42c28eb1b1955a32e8c6
               name: '{#NIC}: speed'
               type: TRAP
               key: 'psutil.net.speed.[{#NIC}]'
@@ -1313,24 +1140,20 @@ zabbix_export:
               history: 7d
               units: b
               preprocessing:
-                -
-                  type: MULTIPLIER
+                - type: MULTIPLIER
                   parameters:
                     - '1000000'
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$PSUTIL_HEARTBEAT}'
-        -
-          uuid: 3e9aac89cde747eb92d395bc4aa27ba5
+        - uuid: 3e9aac89cde747eb92d395bc4aa27ba5
           name: Sensor
           type: TRAP
           key: psutil.sensors.discovery
           delay: '0'
           lifetime: 1h
           item_prototypes:
-            -
-              uuid: 100e4371578346b2b595133fca9e1509
+            - uuid: 100e4371578346b2b595133fca9e1509
               name: '{#TEMPERATURE}: current'
               type: TRAP
               key: 'psutil.sensors.temperature.current.[{#TEMPERATURE}]'
@@ -1338,16 +1161,14 @@ zabbix_export:
               history: 7d
               value_type: FLOAT
               units: °C
-        -
-          uuid: 5179ff950cff42d9bc185ae1f1f49330
+        - uuid: 5179ff950cff42d9bc185ae1f1f49330
           name: CPU
           type: TRAP
           key: psutil.thread.discovery
           delay: '0'
           lifetime: 1h
           item_prototypes:
-            -
-              uuid: 594e19205e024555a3e60dba3d0b1765
+            - uuid: 594e19205e024555a3e60dba3d0b1765
               name: 'Core: frequency ({#THREAD})'
               type: TRAP
               key: 'psutil.cpu.frequency.current.[{#THREAD}]'
@@ -1356,12 +1177,10 @@ zabbix_export:
               value_type: FLOAT
               units: Hz
               preprocessing:
-                -
-                  type: MULTIPLIER
+                - type: MULTIPLIER
                   parameters:
                     - '1000000'
-            -
-              uuid: b400e78106d044989d0c1e54dbf13eab
+            - uuid: b400e78106d044989d0c1e54dbf13eab
               name: 'Core: usage ({#THREAD})'
               type: TRAP
               key: 'psutil.cpu.usage.[{#THREAD}]'
@@ -1370,276 +1189,208 @@ zabbix_export:
               value_type: FLOAT
               units: '%'
       macros:
-        -
-          macro: '{$PSUTIL_HEARTBEAT}'
+        - macro: '{$PSUTIL_HEARTBEAT}'
           value: '60'
           description: 'Interval in seconds to discard unchanged values'
       dashboards:
-        -
-          uuid: 1e862273b20f42829e7a3079efab9dc4
+        - uuid: 1e862273b20f42829e7a3079efab9dc4
           name: 'System dashboard'
           pages:
-            -
-              widgets:
-                -
-                  type: GRAPH_CLASSIC
-                  'y': '18'
+            - widgets:
+                - type: GRAPH_CLASSIC
+                  'y': '12'
                   width: '8'
                   height: '6'
                   fields:
-                    -
-                      type: INTEGER
+                    - type: INTEGER
                       name: source_type
                       value: '1'
-                    -
-                      type: ITEM
+                    - type: ITEM
                       name: itemid
                       value:
                         key: psutil.cpu.frequency.current
                         host: 'OS Linux - Python Agent - Psutil Module'
-                -
-                  type: GRAPH_CLASSIC
+                - type: GRAPH_CLASSIC
                   x: '8'
                   'y': '12'
                   width: '8'
                   height: '6'
                   fields:
-                    -
-                      type: INTEGER
+                    - type: INTEGER
                       name: source_type
                       value: '1'
-                    -
-                      type: ITEM
+                    - type: ITEM
                       name: itemid
                       value:
                         key: psutil.memory.percent
                         host: 'OS Linux - Python Agent - Psutil Module'
-                -
-                  type: GRAPH_CLASSIC
+                - type: GRAPH_CLASSIC
                   x: '16'
                   'y': '12'
                   width: '8'
                   height: '6'
                   fields:
-                    -
-                      type: INTEGER
+                    - type: INTEGER
                       name: source_type
                       value: '1'
-                    -
-                      type: ITEM
+                    - type: ITEM
                       name: itemid
                       value:
                         key: psutil.swap.percent
                         host: 'OS Linux - Python Agent - Psutil Module'
-                -
-                  type: GRAPH_CLASSIC
+                - type: GRAPH_CLASSIC
                   x: '8'
                   width: '8'
                   height: '6'
                   fields:
-                    -
-                      type: INTEGER
+                    - type: INTEGER
                       name: source_type
                       value: '1'
-                    -
-                      type: ITEM
+                    - type: ITEM
                       name: itemid
                       value:
                         key: psutil.net.bytes_recv
                         host: 'OS Linux - Python Agent - Psutil Module'
-                -
-                  type: GRAPH_CLASSIC
+                - type: GRAPH_CLASSIC
                   x: '8'
                   'y': '6'
                   width: '8'
                   height: '6'
                   fields:
-                    -
-                      type: INTEGER
+                    - type: INTEGER
                       name: source_type
                       value: '1'
-                    -
-                      type: ITEM
+                    - type: ITEM
                       name: itemid
                       value:
                         key: psutil.net.bytes_sent
                         host: 'OS Linux - Python Agent - Psutil Module'
-                -
-                  type: GRAPH_PROTOTYPE
-                  'y': '24'
+                - type: GRAPH_PROTOTYPE
+                  'y': '18'
                   width: '24'
                   height: '6'
                   fields:
-                    -
-                      type: INTEGER
+                    - type: INTEGER
                       name: columns
                       value: '3'
-                    -
-                      type: INTEGER
+                    - type: INTEGER
                       name: source_type
                       value: '3'
-                    -
-                      type: ITEM_PROTOTYPE
+                    - type: ITEM_PROTOTYPE
                       name: itemid
                       value:
                         key: 'psutil.sensors.temperature.current.[{#TEMPERATURE}]'
                         host: 'OS Linux - Python Agent - Psutil Module'
-                -
-                  type: GRAPH_CLASSIC
-                  'y': '12'
+                - type: GRAPH_CLASSIC
+                  'y': '6'
                   width: '8'
                   height: '6'
                   fields:
-                    -
-                      type: INTEGER
+                    - type: INTEGER
                       name: source_type
                       value: '1'
-                    -
-                      type: ITEM
+                    - type: ITEM
                       name: itemid
                       value:
                         key: psutil.cpu.times.iowait
                         host: 'OS Linux - Python Agent - Psutil Module'
-                -
-                  type: GRAPH_CLASSIC
-                  'y': '6'
+                - type: GRAPH_CLASSIC
                   width: '8'
                   height: '6'
                   fields:
-                    -
-                      type: INTEGER
+                    - type: INTEGER
                       name: source_type
                       value: '1'
-                    -
-                      type: ITEM
+                    - type: ITEM
                       name: itemid
                       value:
                         key: psutil.cpu.usage
                         host: 'OS Linux - Python Agent - Psutil Module'
-                -
-                  type: GRAPH_CLASSIC
-                  width: '8'
-                  height: '6'
-                  fields:
-                    -
-                      type: INTEGER
-                      name: source_type
-                      value: '1'
-                    -
-                      type: ITEM
-                      name: itemid
-                      value:
-                        key: psutil.cpu.usage.calc
-                        host: 'OS Linux - Python Agent - Psutil Module'
-                -
-                  type: GRAPH_CLASSIC
+                - type: GRAPH_CLASSIC
                   x: '16'
                   width: '8'
                   height: '6'
                   fields:
-                    -
-                      type: INTEGER
+                    - type: INTEGER
                       name: source_type
                       value: '1'
-                    -
-                      type: ITEM
+                    - type: ITEM
                       name: itemid
                       value:
                         key: psutil.disk.read_bytes
                         host: 'OS Linux - Python Agent - Psutil Module'
-                -
-                  type: GRAPH_CLASSIC
+                - type: GRAPH_CLASSIC
                   x: '16'
                   'y': '6'
                   width: '8'
                   height: '6'
                   fields:
-                    -
-                      type: INTEGER
+                    - type: INTEGER
                       name: source_type
                       value: '1'
-                    -
-                      type: ITEM
+                    - type: ITEM
                       name: itemid
                       value:
                         key: psutil.disk.write_bytes
                         host: 'OS Linux - Python Agent - Psutil Module'
-                -
-                  type: GRAPH_PROTOTYPE
+                - type: GRAPH_PROTOTYPE
                   x: '8'
-                  'y': '18'
+                  'y': '24'
                   width: '8'
                   height: '6'
                   fields:
-                    -
-                      type: INTEGER
+                    - type: INTEGER
                       name: columns
                       value: '1'
-                    -
-                      type: INTEGER
+                    - type: INTEGER
                       name: source_type
                       value: '3'
-                    -
-                      type: ITEM_PROTOTYPE
+                    - type: ITEM_PROTOTYPE
                       name: itemid
                       value:
                         key: 'psutil.net.bytes_sent.[{#NIC}]'
                         host: 'OS Linux - Python Agent - Psutil Module'
-                -
-                  type: GRAPH_PROTOTYPE
+                - type: GRAPH_PROTOTYPE
                   x: '16'
-                  'y': '18'
+                  'y': '24'
                   width: '8'
                   height: '6'
                   fields:
-                    -
-                      type: INTEGER
+                    - type: INTEGER
                       name: columns
                       value: '1'
-                    -
-                      type: INTEGER
+                    - type: INTEGER
                       name: source_type
                       value: '3'
-                    -
-                      type: ITEM_PROTOTYPE
+                    - type: ITEM_PROTOTYPE
                       name: itemid
                       value:
                         key: 'psutil.net.bytes_recv.[{#NIC}]'
                         host: 'OS Linux - Python Agent - Psutil Module'
       valuemaps:
-        -
-          uuid: 06147666aa454b939d506ef3668d7072
+        - uuid: 06147666aa454b939d506ef3668d7072
           name: NIC_DUPLEX
           mappings:
-            -
-              value: '0'
+            - value: '0'
               newvalue: unknown
-            -
-              value: '1'
+            - value: '1'
               newvalue: half
-            -
-              value: '2'
+            - value: '2'
               newvalue: full
-        -
-          uuid: ce0e76671c9d47cbbeac3b4f9fdd06ee
+        - uuid: ce0e76671c9d47cbbeac3b4f9fdd06ee
           name: UP_DOWN
           mappings:
-            -
-              value: '1'
+            - value: '1'
               newvalue: up
-            -
-              value: '0'
+            - value: '0'
               newvalue: down
-    -
-      uuid: 0e9d685f7dad4763bead407d8691a854
+    - uuid: 0e9d685f7dad4763bead407d8691a854
       template: 'OS Linux - Python Agent - Pyzender Health Module'
       name: 'OS Linux - Python Agent - Pyzender Health Module'
       groups:
-        -
-          name: Templates
+        - name: Templates
       items:
-        -
-          uuid: f3c066b55c744690b0e864f34586d2fe
+        - uuid: f3c066b55c744690b0e864f34586d2fe
           name: Exception
           type: TRAP
           key: pyzender.health.exception
@@ -1647,67 +1398,62 @@ zabbix_export:
           history: 7d
           trends: '0'
           value_type: TEXT
-        -
-          uuid: d50c534f5505458da42cf6449b91aced
+        - uuid: d50c534f5505458da42cf6449b91aced
           name: Queue
           type: TRAP
           key: pyzender.health.queue
           delay: '0'
           history: 7d
           units: reports
+          description: 'Number of unprocessed reports in queue of Pyzender service'
           preprocessing:
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$HEALTH_HEARTBEAT}'
-        -
-          uuid: e1bcc75091d542d1a5cb071f072e938c
-          name: 'Report count'
-          type: TRAP
-          key: pyzender.health.reports
-          delay: '0'
-          history: 7d
-          units: reports
-          preprocessing:
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
-              parameters:
-                - '{$HEALTH_HEARTBEAT}'
-        -
-          uuid: d51f9352eae745ff896afa7cb3f18c5d
+        - uuid: d51f9352eae745ff896afa7cb3f18c5d
           name: Running
           type: TRAP
           key: pyzender.health.running
           delay: '0'
           history: 7d
           preprocessing:
-            -
-              type: DISCARD_UNCHANGED_HEARTBEAT
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$HEALTH_HEARTBEAT}'
+        - uuid: e1bcc75091d542d1a5cb071f072e938c
+          name: 'Sent items'
+          type: TRAP
+          key: pyzender.health.sent
+          delay: '0'
+          history: 7d
+          units: items/s
+          description: 'Number of rows of data that were successfully sent via the zabbix_sernder binary per second'
+          preprocessing:
+            - type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+            - type: IN_RANGE
+              parameters:
+                - '0'
+                - ''
       macros:
-        -
-          macro: '{$HEALTH_HEARTBEAT}'
+        - macro: '{$HEALTH_HEARTBEAT}'
           value: '300'
           description: 'Interval in seconds to discard unchanged values'
-    -
-      uuid: 7a8a5571e0e54ef0be66b5f02d1b17fe
+    - uuid: 7a8a5571e0e54ef0be66b5f02d1b17fe
       template: 'OS Linux - Python Agent - QBittorrent Module'
       name: 'OS Linux - Python Agent - QBittorrent Module'
       groups:
-        -
-          name: Templates
+        - name: Templates
       discovery_rules:
-        -
-          uuid: 17ceb2e0b89845efa61bf371de83c741
+        - uuid: 17ceb2e0b89845efa61bf371de83c741
           name: Torrent
           type: TRAP
           key: qbittorrent.torrent.discovery
           delay: '0'
           lifetime: 1h
           item_prototypes:
-            -
-              uuid: a0e1c1ae2e6847b28e344eaf776b5861
+            - uuid: a0e1c1ae2e6847b28e344eaf776b5861
               name: '[{#TORRENT_NAME}]: category'
               type: TRAP
               key: 'qbittorrent.torrent.category.[{#TORRENT_NAME}]'
@@ -1716,16 +1462,13 @@ zabbix_export:
               trends: '0'
               value_type: TEXT
               preprocessing:
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$QBIT_HEARTBEAT}'
               tags:
-                -
-                  tag: module
+                - tag: module
                   value: qbittorrent
-            -
-              uuid: c1686a14b5984ef9810d6229562d2552
+            - uuid: c1686a14b5984ef9810d6229562d2552
               name: '[{#TORRENT_NAME}]: download speed'
               type: TRAP
               key: 'qbittorrent.torrent.dlspeed.[{#TORRENT_NAME}]'
@@ -1733,11 +1476,9 @@ zabbix_export:
               history: 7d
               units: B/s
               tags:
-                -
-                  tag: module
+                - tag: module
                   value: qbittorrent
-            -
-              uuid: bc30992c3fda472183782ce70d139a72
+            - uuid: bc30992c3fda472183782ce70d139a72
               name: '[{#TORRENT_NAME}]: downloaded'
               type: TRAP
               key: 'qbittorrent.torrent.downloaded.[{#TORRENT_NAME}]'
@@ -1745,11 +1486,9 @@ zabbix_export:
               history: 7d
               units: B
               tags:
-                -
-                  tag: module
+                - tag: module
                   value: qbittorrent
-            -
-              uuid: 2b921af721024bcdbfedbdac6c08ef3f
+            - uuid: 2b921af721024bcdbfedbdac6c08ef3f
               name: '[{#TORRENT_NAME}]: size'
               type: TRAP
               key: 'qbittorrent.torrent.size.[{#TORRENT_NAME}]'
@@ -1757,16 +1496,13 @@ zabbix_export:
               history: 7d
               units: B
               preprocessing:
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$QBIT_HEARTBEAT}'
               tags:
-                -
-                  tag: module
+                - tag: module
                   value: qbittorrent
-            -
-              uuid: 4871dd8da31c410b8cd00dba813b72f0
+            - uuid: 4871dd8da31c410b8cd00dba813b72f0
               name: '[{#TORRENT_NAME}]: state'
               type: TRAP
               key: 'qbittorrent.torrent.state.[{#TORRENT_NAME}]'
@@ -1775,16 +1511,13 @@ zabbix_export:
               trends: '0'
               value_type: TEXT
               preprocessing:
-                -
-                  type: DISCARD_UNCHANGED_HEARTBEAT
+                - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
                     - '{$QBIT_HEARTBEAT}'
               tags:
-                -
-                  tag: module
+                - tag: module
                   value: qbittorrent
-            -
-              uuid: 911ebaf07a564a7b8cc0f995571f6076
+            - uuid: 911ebaf07a564a7b8cc0f995571f6076
               name: '[{#TORRENT_NAME}]: uploaded'
               type: TRAP
               key: 'qbittorrent.torrent.uploaded.[{#TORRENT_NAME}]'
@@ -1792,11 +1525,9 @@ zabbix_export:
               history: 7d
               units: B
               tags:
-                -
-                  tag: module
+                - tag: module
                   value: qbittorrent
-            -
-              uuid: 4762891f7fa64bf6ae923cdb22f07bc1
+            - uuid: 4762891f7fa64bf6ae923cdb22f07bc1
               name: '[{#TORRENT_NAME}]: upload speed'
               type: TRAP
               key: 'qbittorrent.torrent.upspeed.[{#TORRENT_NAME}]'
@@ -1804,71 +1535,59 @@ zabbix_export:
               history: 7d
               units: B/s
               tags:
-                -
-                  tag: module
+                - tag: module
                   value: qbittorrent
       macros:
-        -
-          macro: '{$QBIT_HEARTBEAT}'
+        - macro: '{$QBIT_HEARTBEAT}'
           value: '300'
           description: 'Interval in seconds to discard unchanged values'
   graphs:
-    -
-      uuid: c831e83b8ee54b48873cb06e06286240
+    - uuid: c831e83b8ee54b48873cb06e06286240
       name: 'CPU times'
       show_triggers: 'NO'
       type: STACKED
       graph_items:
-        -
-          sortorder: '1'
+        - sortorder: '1'
           color: BBDEFB
           item:
             host: 'OS Linux - Python Agent - Psutil Module'
             key: psutil.cpu.times.guest
-        -
-          sortorder: '2'
+        - sortorder: '2'
           color: 64B5F6
           item:
             host: 'OS Linux - Python Agent - Psutil Module'
             key: psutil.cpu.times.guest_nice
-        -
-          sortorder: '3'
+        - sortorder: '3'
           color: 2196F3
           item:
             host: 'OS Linux - Python Agent - Psutil Module'
             key: psutil.cpu.times.iowait
-        -
-          sortorder: '4'
+        - sortorder: '4'
           color: 1E88E5
           item:
             host: 'OS Linux - Python Agent - Psutil Module'
             key: psutil.cpu.times.irq
-        -
-          sortorder: '5'
+        - sortorder: '5'
           color: 1976D2
           item:
             host: 'OS Linux - Python Agent - Psutil Module'
             key: psutil.cpu.times.nice
-        -
-          sortorder: '6'
+        - sortorder: '6'
           color: 1565C0
           item:
             host: 'OS Linux - Python Agent - Psutil Module'
             key: psutil.cpu.times.softirq
-        -
-          sortorder: '7'
+        - sortorder: '7'
           color: 0D47A1
           item:
             host: 'OS Linux - Python Agent - Psutil Module'
             key: psutil.cpu.times.steal
-        -
-          sortorder: '8'
+        - sortorder: '8'
           color: '093578'
           item:
             host: 'OS Linux - Python Agent - Psutil Module'
             key: psutil.cpu.times.system
-        -
-          sortorder: '9'
+        - sortorder: '9'
           color: '062350'
           item:
             host: 'OS Linux - Python Agent - Psutil Module'

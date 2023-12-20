@@ -82,8 +82,10 @@ class Module(ABC):
     def _report_exception(self, message: str):
         print(f"'{self.name}' module has failed with an error: {message}")
         exception = DataReport(
-            items={"availability": 1, "exception": message},
-            key="pyzender",
+            items={
+                "exception": message
+            },
+            key="pyzender.health",
             timestamp=self.timestamp(),
         )
         self._report(exception)
