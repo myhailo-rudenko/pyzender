@@ -83,7 +83,7 @@ Description=pyZender service
 After=multi-user.target
 [Service]
 Type=simple
-ExecStart=${PYTHON3_VENV} -c "from pyzender import Agent;Agent(\"${ETC_CONFIG_FILE}\").run()" >> /dev/null
+ExecStart=${PYTHON3_VENV} -c "from pyzender import Agent;Agent(\"${ETC_CONFIG_FILE}\").run()"
 Restart=on-failure
 User=${USER}
 [Install]
