@@ -12,9 +12,9 @@ class AgentStats(Module):
         health = DataReport(
             items={
                 "running": 1,
-                "processed": self.agent.processed,
-                "failed": self.agent.failed,
-                "sent": self.agent.sent,
+                "processed": self.agent.processed_total,
+                "failed": self.agent.failed_total,
+                "sent": self.agent.sent_total,
                 "queue": sum(
                     [len(data_lines) for _, data_lines in self.agent.data_queue.items()]
                     + [len(data_lines) for _, data_lines in self.agent.discovery_queue.items()]

@@ -67,7 +67,7 @@ else
   done
 
   if $replace_config; then
-    cp $PKG_CONFIG_FILE $ETC_CONFIG_FILE
+    $SUDO cp $PKG_CONFIG_FILE $ETC_CONFIG_FILE
   fi
 fi
 

@@ -26,8 +26,29 @@ zabbix_export:
               value: 'agent stats'
             - tag: service
               value: pyzender
+        - uuid: 4e3ffc47869346a8a80ba924729fd277
+          name: 'Items: failed'
+          type: TRAP
+          key: pyzender.failed
+          delay: '0'
+          history: 7d
+          units: items/s
+          description: 'Number of rows of data per second that were failed to sent via zabbix_sender binary to the server.'
+          preprocessing:
+            - type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+            - type: IN_RANGE
+              parameters:
+                - '0'
+                - ''
+          tags:
+            - tag: module
+              value: 'agent stats'
+            - tag: service
+              value: pyzender
         - uuid: 7f6e0fc2be2e4b88b7a4adf3c5abd632
-          name: 'Items: Processed'
+          name: 'Items: processed'
           type: TRAP
           key: pyzender.processed
           delay: '0'
@@ -48,7 +69,7 @@ zabbix_export:
             - tag: service
               value: pyzender
         - uuid: f258d75d994445a495d75f7ef27b00af
-          name: 'Items: Queue'
+          name: 'Items: queue'
           type: TRAP
           key: pyzender.queue
           delay: '0'
@@ -77,7 +98,7 @@ zabbix_export:
             - tag: service
               value: pyzender
         - uuid: 1ba32a88bd6c49fab8bfea7cdc82d8cc
-          name: 'Items: Sent'
+          name: 'Items: sent'
           type: TRAP
           key: pyzender.sent
           delay: '0'
