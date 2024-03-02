@@ -49,7 +49,7 @@ class PSUtil(Module):
     #             print(f"{sconn.laddr.ip}:{sconn.laddr.port}")
 
     def _discover_threads(self):
-        threads = [n for n in range(self.psutil.cpu_count())]
+        threads = [str(n) for n in range(self.psutil.cpu_count())]
 
         discovery = DiscoveryReport(
             key="psutil.thread.discovery", macros="{#THREAD}",

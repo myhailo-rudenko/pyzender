@@ -1,7 +1,6 @@
 zabbix_export:
-  version: '5.4'
-  date: '2023-12-20T11:39:25Z'
-  groups:
+  version: '6.4'
+  template_groups:
     - uuid: 7df96b18c230490a9a0a9e2307226338
       name: Templates
   templates:
@@ -10,9 +9,122 @@ zabbix_export:
       name: 'OS Linux - Python Agent'
       templates:
         - name: 'OS Linux - Python Agent - Psutil Module'
-        - name: 'OS Linux - Python Agent - Pyzender Health Module'
       groups:
         - name: Templates
+      items:
+        - uuid: ab13ba1fd26f4373bba4a4dc1f58ca32
+          name: 'pyzender: Exception'
+          type: TRAP
+          key: pyzender.exception
+          delay: '0'
+          history: 60d
+          trends: '0'
+          value_type: TEXT
+          description: 'An exception message that occurred during a module operations and was reported to the server.'
+          tags:
+            - tag: module
+              value: 'agent stats'
+            - tag: service
+              value: pyzender
+        - uuid: 7f6e0fc2be2e4b88b7a4adf3c5abd632
+          name: 'Items: Processed'
+          type: TRAP
+          key: pyzender.processed
+          delay: '0'
+          history: 7d
+          units: items/s
+          description: 'Number of rows of data per second that were successfully sent via zabbix_sender binary and processed by the server.'
+          preprocessing:
+            - type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+            - type: IN_RANGE
+              parameters:
+                - '0'
+                - ''
+          tags:
+            - tag: module
+              value: 'agent stats'
+            - tag: service
+              value: pyzender
+        - uuid: f258d75d994445a495d75f7ef27b00af
+          name: 'Items: Queue'
+          type: TRAP
+          key: pyzender.queue
+          delay: '0'
+          history: 7d
+          units: items
+          description: 'Number of items in queue of pyzender service'
+          tags:
+            - tag: module
+              value: 'agent stats'
+            - tag: service
+              value: pyzender
+        - uuid: 7bbbc1a67b734f248c9c2d8cd214788c
+          name: 'pyzender: Running'
+          type: TRAP
+          key: pyzender.running
+          delay: '0'
+          history: 7d
+          description: 'Dummy indicator. It tells that the agent is still running'
+          preprocessing:
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - '{$HEALTH_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: 'agent stats'
+            - tag: service
+              value: pyzender
+        - uuid: 1ba32a88bd6c49fab8bfea7cdc82d8cc
+          name: 'Items: Sent'
+          type: TRAP
+          key: pyzender.sent
+          delay: '0'
+          history: 7d
+          units: items/s
+          description: 'Number of rows of data per second that were successfully sent via zabbix_sender binary to the server. This number includes all processed and failed request'
+          preprocessing:
+            - type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+            - type: IN_RANGE
+              parameters:
+                - '0'
+                - ''
+          tags:
+            - tag: module
+              value: 'agent stats'
+            - tag: service
+              value: pyzender
+      dashboards:
+        - uuid: 79884cad5ac04c5f98d04555ecb39d58
+          name: 'Agent itself'
+          pages:
+            - widgets:
+                - type: graph
+                  width: '18'
+                  height: '8'
+                  fields:
+                    - type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'OS Linux - Python Agent'
+                        name: 'Unsorted reports & sent items'
+                - type: plaintext
+                  name: Exceptions
+                  x: '18'
+                  width: '6'
+                  height: '8'
+                  fields:
+                    - type: ITEM
+                      name: itemids
+                      value:
+                        host: 'OS Linux - Python Agent'
+                        key: pyzender.exception
+                    - type: INTEGER
+                      name: style
+                      value: '1'
     - uuid: e140d70bb077440db215a682f28f5a53
       template: 'OS Linux - Python Agent - Psutil Module'
       name: 'OS Linux - Python Agent - Psutil Module'
@@ -27,9 +139,14 @@ zabbix_export:
           history: 7d
           description: 'The number of physical cores in the system'
           preprocessing:
-            - type: DISCARD_UNCHANGED
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
-                - ''
+                - '{$UNCHANGED_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 0afacca530f34f8da54ff5c0897a56b4
           name: 'CPU: context switches'
           type: TRAP
@@ -45,6 +162,11 @@ zabbix_export:
             - type: CHANGE_PER_SECOND
               parameters:
                 - ''
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: f0f8651887144bc3a4c7c1badd7477bc
           name: 'CPU: current frequency'
           type: TRAP
@@ -60,6 +182,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 9e588e59fbb94d09b34f7b6fb2ee1f99
           name: 'CPU: max. frequency'
           type: TRAP
@@ -72,9 +199,14 @@ zabbix_export:
             - type: MULTIPLIER
               parameters:
                 - '1000000'
-            - type: DISCARD_UNCHANGED
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
-                - ''
+                - '{$UNCHANGED_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 607f3ef0ba474cfba7c7c0eb50a4b7e3
           name: 'CPU: min. frequency'
           type: TRAP
@@ -87,9 +219,14 @@ zabbix_export:
             - type: MULTIPLIER
               parameters:
                 - '1000000'
-            - type: DISCARD_UNCHANGED
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
-                - ''
+                - '{$UNCHANGED_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 25e1a617575042e4a8d53c95b97d8f87
           name: 'CPU: interrupts'
           type: TRAP
@@ -105,6 +242,11 @@ zabbix_export:
             - type: CHANGE_PER_SECOND
               parameters:
                 - ''
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 5cf2527527d94fd48ba4fd5953712746
           name: 'CPU: loadavg 1m'
           type: TRAP
@@ -113,6 +255,11 @@ zabbix_export:
           history: 7d
           value_type: FLOAT
           description: 'The number of processes in the system run queue averaged over the last 1 minute'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: b03868425c3448ccbae038d45df8ae39
           name: 'CPU: loadavg 5m'
           type: TRAP
@@ -121,6 +268,11 @@ zabbix_export:
           history: 7d
           value_type: FLOAT
           description: 'The number of processes in the system run queue averaged over the last 5 minutes'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 95cfd25f24f3461e8b6201c496a77caa
           name: 'CPU: loadavg 15m'
           type: TRAP
@@ -129,12 +281,22 @@ zabbix_export:
           history: 7d
           value_type: FLOAT
           description: 'The number of processes in the system run queue averaged over the last 15 minutes'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 6b9edd95bca249bb8327c688828d3bff
           name: 'CPU: soft interrupts'
           type: TRAP
           key: psutil.cpu.soft_interrupts
           delay: '0'
           history: 7d
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 31d9b457daf4431690cda6f501fbe0b5
           name: 'CPU: system calls'
           type: TRAP
@@ -145,6 +307,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: dd3177f592604d5b99fbe8ba0a6db898
           name: 'CPU: threads'
           type: TRAP
@@ -153,9 +320,14 @@ zabbix_export:
           history: 7d
           description: 'The number of logical threads in the system'
           preprocessing:
-            - type: DISCARD_UNCHANGED
+            - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
-                - ''
+                - '{$UNCHANGED_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: d43524aa4ff94dbbb671d2fbab059138
           name: 'CPU times: guest'
           type: TRAP
@@ -168,6 +340,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: a9738bd4dbc8430399b85cab0e52dd7e
           name: 'CPU times: guest_nice'
           type: TRAP
@@ -180,6 +357,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: d08cb61368f941ea84c3755d21fbf6ed
           name: 'CPU times: idle'
           type: TRAP
@@ -192,6 +374,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: adc87169662540d5bac2d8d3e7440f63
           name: 'CPU times: iowait'
           type: TRAP
@@ -204,6 +391,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 43f005736e104d6c8d53dbf6904de485
           name: 'CPU times: irq'
           type: TRAP
@@ -216,6 +408,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 50495d13c464444487d23b2fa2a5e552
           name: 'CPU times: nice'
           type: TRAP
@@ -228,6 +425,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 7aa130acc39444d982643980864f22fa
           name: 'CPU times: softirq'
           type: TRAP
@@ -240,6 +442,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 635ba71676a24c74bfe79698f556e0ca
           name: 'CPU times: steal'
           type: TRAP
@@ -252,6 +459,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: b57be887e103435b9ce14362938e18fd
           name: 'CPU times: system'
           type: TRAP
@@ -264,6 +476,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 12ea8881c4f4455bb82b93398639ce89
           name: 'CPU times: user'
           type: TRAP
@@ -276,6 +493,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 8d375dce3f5146ca893d8992d50b1d9c
           name: 'CPU: usage'
           type: TRAP
@@ -284,19 +506,11 @@ zabbix_export:
           history: 7d
           value_type: FLOAT
           units: '%'
-        - uuid: 7b624a2769f54ef9b171bb1c84ba2758
-          name: 'CPU: usage (calc)'
-          type: CALCULATED
-          key: psutil.cpu.usage.calc
-          delay: '5'
-          history: 7d
-          value_type: FLOAT
-          units: '%'
-          params: last(//psutil.cpu.usage)
-          preprocessing:
-            - type: DISCARD_UNCHANGED
-              parameters:
-                - ''
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: f9551a0e865a46b990b7b4890ce8a314
           name: 'Disks: read bytes'
           type: TRAP
@@ -311,6 +525,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 1e64f6215b2c446c8d5b981ee6c90cf3
           name: 'Disks: read IOPS'
           type: TRAP
@@ -325,6 +544,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 51494fbdea574194a258c4923a3bfa71
           name: 'Disks: read time'
           type: TRAP
@@ -339,6 +563,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 517552f276d14ec9a0716328ae04c36d
           name: 'Disks: write bytes'
           type: TRAP
@@ -353,6 +582,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 04fbb037e5c04889a152d9a24ebb206d
           name: 'Disks: write IOPS'
           type: TRAP
@@ -367,6 +601,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 04e81c3cd9e2416ea1a91813bef4e784
           name: 'Disks: write time'
           type: TRAP
@@ -381,6 +620,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 19775e28664a4961b6609196a6329148
           name: 'Memory: active'
           type: TRAP
@@ -389,6 +633,11 @@ zabbix_export:
           history: 7d
           units: B
           description: 'Memory currently in use or very recently used, and so it is in RAM.'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 0139af55f2fe4756be4d8a8881720596
           name: 'Memory: available'
           type: TRAP
@@ -400,6 +649,11 @@ zabbix_export:
             The memory that can be given instantly to processes without the system going into swap.                                                                                            
             
             This is calculated by summing different memory values depending on the platform and it is supposed to be used to monitor actual memory usage in a cross platform fashion.
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 510abe85cbfe451b8cb021000ee2aa69
           name: 'Memory: buffers'
           type: TRAP
@@ -408,6 +662,11 @@ zabbix_export:
           history: 7d
           units: B
           description: 'Cache for things like file system metadata.'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 715b765e4aae472e836f421820e05b80
           name: 'Memory: cached'
           type: TRAP
@@ -416,6 +675,11 @@ zabbix_export:
           history: 7d
           units: B
           description: 'Cache for various things.'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 7105788471c04451886f44de546c0adf
           name: 'Memory: free'
           type: TRAP
@@ -427,6 +691,11 @@ zabbix_export:
             Memory not being used at all (zeroed) that is readily available;
             Note that this doesn't reflect the actual memory available.
             (use 'available' instead)
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: c7078243fa28405a8086ed7c7735e350
           name: 'Memory: inactive'
           type: TRAP
@@ -435,6 +704,11 @@ zabbix_export:
           history: 7d
           units: B
           description: 'Memory that is marked as not used.'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 5ddba02da448441689c8af478ec3111e
           name: 'Memory: usage'
           type: TRAP
@@ -448,6 +722,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 45be09af180a489eb192243a26f31de3
           name: 'Memory: shared'
           type: TRAP
@@ -456,6 +735,11 @@ zabbix_export:
           history: 7d
           units: B
           description: 'Memory that may be simultaneously accessed by multiple processes.'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: f8858d4fd56b41cd80fedfb1553a6c4d
           name: 'Memory: total'
           type: TRAP
@@ -464,6 +748,11 @@ zabbix_export:
           history: 7d
           units: B
           description: 'Total physical memory available'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: aca8602773c64fe98c23f2c4deeeb80d
           name: 'Memory: used'
           type: TRAP
@@ -476,122 +765,269 @@ zabbix_export:
               - macOS: active + wired
               - BSD: active + wired + cached
               - Linux: total - free
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 8e77460957ec41029e1ed9b0c1daecca
-          name: 'Network: byte receive rate'
+          name: 'Network: bytes received'
           type: TRAP
           key: psutil.net.bytes_recv
           delay: '0'
           history: 7d
+          units: B
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
+        - uuid: ddabcdf39fe641d9a78d05f75a4ce48d
+          name: 'Network: bytes receive rate'
+          type: DEPENDENT
+          key: psutil.net.bytes_recv_rate
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
           units: B/s
           preprocessing:
             - type: CHANGE_PER_SECOND
               parameters:
                 - ''
-            - type: DISCARD_UNCHANGED_HEARTBEAT
+          master_item:
+            key: psutil.net.bytes_recv
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
+        - uuid: c0e31e81204e4d3caf46d4763af991f3
+          name: 'Network: bytes send rate'
+          type: DEPENDENT
+          key: psutil.net.bytes_send_rate
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: B/s
+          preprocessing:
+            - type: CHANGE_PER_SECOND
               parameters:
-                - '{$PSUTIL_HEARTBEAT}'
+                - ''
+          master_item:
+            key: psutil.net.bytes_sent
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
+        - uuid: 81aacfd92a4144749cd3f1b24178ea04
+          name: 'Network: bytes send rate (inverted axis)'
+          type: DEPENDENT
+          key: psutil.net.bytes_send_rate_inverted
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: B/s
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '-1'
+          master_item:
+            key: psutil.net.bytes_send_rate
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 6b01d02cc47d4859bda413a2a950eb7c
-          name: 'Network: byte send rate'
+          name: 'Network: bytes sent'
           type: TRAP
           key: psutil.net.bytes_sent
           delay: '0'
           history: 7d
-          units: B/s
-          preprocessing:
-            - type: CHANGE_PER_SECOND
-              parameters:
-                - ''
-            - type: DISCARD_UNCHANGED_HEARTBEAT
-              parameters:
-                - '{$PSUTIL_HEARTBEAT}'
+          units: B
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 12687520f0734298adef877fb68ec9ff
           name: 'Network: drop in'
           type: TRAP
           key: psutil.net.dropin
           delay: '0'
           history: 7d
-          units: drop/s
-          description: 'The number of dropped incoming packets per second'
+          value_type: FLOAT
+          units: drops
+          description: 'The number of dropped incoming packets'
           preprocessing:
-            - type: CHANGE_PER_SECOND
+            - type: SIMPLE_CHANGE
               parameters:
                 - ''
-            - type: DISCARD_UNCHANGED_HEARTBEAT
-              parameters:
-                - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
+        - uuid: 143ce78e76fd4e06aa2d575c3c8b832e
+          name: 'Network: drop in (sum, 10m)'
+          type: CALCULATED
+          key: psutil.net.dropin.sum10m
+          history: 1d
+          trends: '0'
+          units: drops
+          params: 'sum(//psutil.net.dropin,10m)'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: cf4871dcdb44448fa27e2b0fec7a3106
           name: 'Network: drop out'
           type: TRAP
           key: psutil.net.dropout
           delay: '0'
           history: 7d
-          units: drop/s
-          description: 'The number of dropped outcoming packets per second'
+          value_type: FLOAT
+          units: drops
+          description: 'The number of dropped outcoming packets'
           preprocessing:
-            - type: CHANGE_PER_SECOND
+            - type: SIMPLE_CHANGE
               parameters:
                 - ''
-            - type: DISCARD_UNCHANGED_HEARTBEAT
-              parameters:
-                - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
+        - uuid: 923b05d814014a02b5eb728cf469465c
+          name: 'Network: drop out (sum, 10m)'
+          type: CALCULATED
+          key: psutil.net.dropout.sum10m
+          history: 1d
+          trends: '0'
+          units: drops
+          params: 'sum(//psutil.net.dropout,10m)'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: b0c7ba761268493ebe7a5025c96b5f4a
           name: 'Network: error in'
           type: TRAP
           key: psutil.net.errin
           delay: '0'
           history: 7d
-          units: error/s
-          description: 'The number of errored incoming packets per second'
+          value_type: FLOAT
+          units: errors
+          description: 'The number of errored incoming packets'
           preprocessing:
-            - type: CHANGE_PER_SECOND
+            - type: SIMPLE_CHANGE
               parameters:
                 - ''
-            - type: DISCARD_UNCHANGED_HEARTBEAT
-              parameters:
-                - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
+        - uuid: c59603bad33d40d9a3a6599912cdf050
+          name: 'Network: error in (sum, 10m)'
+          type: CALCULATED
+          key: psutil.net.errin.sum10m
+          history: 1d
+          trends: '0'
+          units: errors
+          params: 'sum(//psutil.net.errin,10m)'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: fd9e7d32ba074aa0940dc8eb65b13eb2
           name: 'Network: error out'
           type: TRAP
           key: psutil.net.errout
           delay: '0'
           history: 7d
-          units: error/s
-          description: 'The number of errored outcoming packets per second'
+          value_type: FLOAT
+          units: errors
+          description: 'The number of errored outcoming packets'
           preprocessing:
-            - type: CHANGE_PER_SECOND
+            - type: SIMPLE_CHANGE
               parameters:
                 - ''
-            - type: DISCARD_UNCHANGED_HEARTBEAT
-              parameters:
-                - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
+        - uuid: db4faabd6d4a4ef4a9544ed116564c5d
+          name: 'Network: error out (sum, 10m)'
+          type: CALCULATED
+          key: psutil.net.errout.sum10m
+          history: 1d
+          trends: '0'
+          units: errors
+          params: 'sum(//psutil.net.errout,10m)'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 6e540a6014d049b1b7b42fc7b7e93a36
           name: 'Network: packet receive rate'
           type: TRAP
           key: psutil.net.packets_recv
           delay: '0'
           history: 7d
+          value_type: FLOAT
           units: packet/s
           preprocessing:
             - type: CHANGE_PER_SECOND
               parameters:
                 - ''
-            - type: DISCARD_UNCHANGED_HEARTBEAT
-              parameters:
-                - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 51a3b9b8dc05452fb4607319da05caa8
           name: 'Network: packet send rate'
           type: TRAP
           key: psutil.net.packets_sent
           delay: '0'
           history: 7d
+          value_type: FLOAT
           units: packet/s
           preprocessing:
             - type: CHANGE_PER_SECOND
               parameters:
                 - ''
-            - type: DISCARD_UNCHANGED_HEARTBEAT
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
+        - uuid: 2e719604e6a9451ba2a43242eec3ddb2
+          name: 'Network: packet send rate (inverted axis)'
+          type: DEPENDENT
+          key: psutil.net.packets_sent_inverted
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: packet/s
+          preprocessing:
+            - type: MULTIPLIER
               parameters:
-                - '{$PSUTIL_HEARTBEAT}'
+                - '-1'
+          master_item:
+            key: psutil.net.packets_sent
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 9c7eb059e3fb4a6a9d25e9e134c7067c
           name: 'Swap: free'
           type: TRAP
@@ -604,6 +1040,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: fc6552f0f9044b3598ae4be4a9fd7a20
           name: 'Swap: usage'
           type: TRAP
@@ -617,6 +1058,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: a580f7beb01c4e73a020516f49130c01
           name: 'Swapped in'
           type: TRAP
@@ -632,6 +1078,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: f819714b1e404e54bdded83c81d2abfb
           name: 'Swapped out'
           type: TRAP
@@ -647,6 +1098,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 6c8d0bce90cc49539fb320b35aa0f115
           name: 'Swap: total'
           type: TRAP
@@ -659,6 +1115,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 0ca56b38b5994db38e75c01aec1a8808
           name: 'Swap: used'
           type: TRAP
@@ -671,6 +1132,11 @@ zabbix_export:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
                 - '{$PSUTIL_HEARTBEAT}'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: f3b75c6872ee4130ae64cfc685538dd1
           name: 'Psutil Module: data inteval'
           type: ZABBIX_ACTIVE
@@ -678,6 +1144,11 @@ zabbix_export:
           delay: '5'
           history: '0'
           trends: '0'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
         - uuid: 575cee73d0b3476e8a2c58d65caa3e57
           name: 'Psutil Module: discovery inteval'
           type: ZABBIX_ACTIVE
@@ -685,6 +1156,11 @@ zabbix_export:
           delay: '60'
           history: '0'
           trends: '0'
+          tags:
+            - tag: module
+              value: psutil
+            - tag: service
+              value: pyzender
       discovery_rules:
         - uuid: 3c3e4d363a604531a8a6c3701f64076b
           name: Disk
@@ -950,8 +1426,6 @@ zabbix_export:
               key: 'psutil.net.duplex.[{#NIC}]'
               delay: '0'
               history: 7d
-              valuemap:
-                name: NIC_DUPLEX
               preprocessing:
                 - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
@@ -1088,8 +1562,6 @@ zabbix_export:
               key: 'psutil.net.isup.[{#NIC}]'
               delay: '0'
               history: 7d
-              valuemap:
-                name: UP_DOWN
               preprocessing:
                 - type: DISCARD_UNCHANGED_HEARTBEAT
                   parameters:
@@ -1154,13 +1626,24 @@ zabbix_export:
           lifetime: 1h
           item_prototypes:
             - uuid: 100e4371578346b2b595133fca9e1509
-              name: '{#TEMPERATURE}: current'
+              name: 'Temperature sensor: {#TEMPERATURE}'
               type: TRAP
               key: 'psutil.sensors.temperature.current.[{#TEMPERATURE}]'
               delay: '0'
               history: 7d
               value_type: FLOAT
               units: °C
+          graph_prototypes:
+            - uuid: ca5f34c0e275485981e1e73d1f3b6a80
+              name: 'Temperature sensor: {#TEMPERATURE}'
+              width: '600'
+              height: '300'
+              graph_items:
+                - sortorder: '1'
+                  color: 29B6F6
+                  item:
+                    host: 'OS Linux - Python Agent - Psutil Module'
+                    key: 'psutil.sensors.temperature.current.[{#TEMPERATURE}]'
         - uuid: 5179ff950cff42d9bc185ae1f1f49330
           name: CPU
           type: TRAP
@@ -1194,179 +1677,727 @@ zabbix_export:
           description: 'Interval in seconds to discard unchanged values'
       dashboards:
         - uuid: 1e862273b20f42829e7a3079efab9dc4
-          name: 'System dashboard'
+          name: Psutil
           pages:
-            - widgets:
-                - type: GRAPH_CLASSIC
-                  'y': '12'
-                  width: '8'
-                  height: '6'
+            - name: Summary
+              widgets:
+                - type: item
+                  width: '2'
+                  hide_header: 'YES'
                   fields:
                     - type: INTEGER
-                      name: source_type
+                      name: adv_conf
                       value: '1'
+                    - type: INTEGER
+                      name: decimal_places
+                      value: '0'
+                    - type: INTEGER
+                      name: decimal_size
+                      value: '30'
+                    - type: STRING
+                      name: description
+                      value: CPU
+                    - type: INTEGER
+                      name: desc_bold
+                      value: '1'
+                    - type: INTEGER
+                      name: desc_v_pos
+                      value: '0'
                     - type: ITEM
                       name: itemid
                       value:
+                        host: 'OS Linux - Python Agent - Psutil Module'
+                        key: psutil.cpu.cores
+                    - type: INTEGER
+                      name: show
+                      value: '1'
+                    - type: INTEGER
+                      name: show
+                      value: '2'
+                    - type: STRING
+                      name: units
+                      value: cores
+                    - type: INTEGER
+                      name: units_pos
+                      value: '3'
+                    - type: INTEGER
+                      name: units_size
+                      value: '15'
+                    - type: INTEGER
+                      name: value_size
+                      value: '55'
+                - type: item
+                  'y': '2'
+                  width: '2'
+                  hide_header: 'YES'
+                  fields:
+                    - type: INTEGER
+                      name: adv_conf
+                      value: '1'
+                    - type: INTEGER
+                      name: decimal_places
+                      value: '0'
+                    - type: INTEGER
+                      name: decimal_size
+                      value: '30'
+                    - type: STRING
+                      name: description
+                      value: CPU
+                    - type: INTEGER
+                      name: desc_bold
+                      value: '1'
+                    - type: INTEGER
+                      name: desc_v_pos
+                      value: '0'
+                    - type: ITEM
+                      name: itemid
+                      value:
+                        host: 'OS Linux - Python Agent - Psutil Module'
+                        key: psutil.cpu.threads
+                    - type: INTEGER
+                      name: show
+                      value: '1'
+                    - type: INTEGER
+                      name: show
+                      value: '2'
+                    - type: STRING
+                      name: units
+                      value: threads
+                    - type: INTEGER
+                      name: units_pos
+                      value: '3'
+                    - type: INTEGER
+                      name: units_size
+                      value: '15'
+                    - type: INTEGER
+                      name: value_size
+                      value: '55'
+                - type: item
+                  'y': '4'
+                  width: '2'
+                  hide_header: 'YES'
+                  fields:
+                    - type: INTEGER
+                      name: adv_conf
+                      value: '1'
+                    - type: INTEGER
+                      name: decimal_size
+                      value: '30'
+                    - type: STRING
+                      name: description
+                      value: Frequency
+                    - type: INTEGER
+                      name: desc_bold
+                      value: '1'
+                    - type: INTEGER
+                      name: desc_v_pos
+                      value: '0'
+                    - type: ITEM
+                      name: itemid
+                      value:
+                        host: 'OS Linux - Python Agent - Psutil Module'
                         key: psutil.cpu.frequency.current
-                        host: 'OS Linux - Python Agent - Psutil Module'
-                - type: GRAPH_CLASSIC
-                  x: '8'
-                  'y': '12'
-                  width: '8'
-                  height: '6'
-                  fields:
                     - type: INTEGER
-                      name: source_type
+                      name: show
                       value: '1'
-                    - type: ITEM
-                      name: itemid
-                      value:
-                        key: psutil.memory.percent
-                        host: 'OS Linux - Python Agent - Psutil Module'
-                - type: GRAPH_CLASSIC
-                  x: '16'
-                  'y': '12'
-                  width: '8'
-                  height: '6'
-                  fields:
                     - type: INTEGER
-                      name: source_type
-                      value: '1'
-                    - type: ITEM
-                      name: itemid
-                      value:
-                        key: psutil.swap.percent
-                        host: 'OS Linux - Python Agent - Psutil Module'
-                - type: GRAPH_CLASSIC
-                  x: '8'
-                  width: '8'
-                  height: '6'
-                  fields:
+                      name: show
+                      value: '2'
                     - type: INTEGER
-                      name: source_type
-                      value: '1'
-                    - type: ITEM
-                      name: itemid
-                      value:
-                        key: psutil.net.bytes_recv
-                        host: 'OS Linux - Python Agent - Psutil Module'
-                - type: GRAPH_CLASSIC
-                  x: '8'
-                  'y': '6'
-                  width: '8'
-                  height: '6'
-                  fields:
+                      name: show
+                      value: '4'
+                    - type: STRING
+                      name: units
+                      value: Hz
                     - type: INTEGER
-                      name: source_type
-                      value: '1'
-                    - type: ITEM
-                      name: itemid
-                      value:
-                        key: psutil.net.bytes_sent
-                        host: 'OS Linux - Python Agent - Psutil Module'
-                - type: GRAPH_PROTOTYPE
-                  'y': '18'
-                  width: '24'
-                  height: '6'
-                  fields:
-                    - type: INTEGER
-                      name: columns
+                      name: units_pos
                       value: '3'
                     - type: INTEGER
-                      name: source_type
-                      value: '3'
-                    - type: ITEM_PROTOTYPE
-                      name: itemid
-                      value:
-                        key: 'psutil.sensors.temperature.current.[{#TEMPERATURE}]'
-                        host: 'OS Linux - Python Agent - Psutil Module'
-                - type: GRAPH_CLASSIC
+                      name: units_size
+                      value: '15'
+                    - type: INTEGER
+                      name: value_size
+                      value: '55'
+                - type: item
                   'y': '6'
-                  width: '8'
-                  height: '6'
+                  width: '2'
+                  hide_header: 'YES'
                   fields:
                     - type: INTEGER
-                      name: source_type
+                      name: adv_conf
                       value: '1'
+                    - type: INTEGER
+                      name: decimal_places
+                      value: '1'
+                    - type: INTEGER
+                      name: decimal_size
+                      value: '30'
+                    - type: STRING
+                      name: description
+                      value: Usage
+                    - type: INTEGER
+                      name: desc_bold
+                      value: '1'
+                    - type: INTEGER
+                      name: desc_v_pos
+                      value: '0'
                     - type: ITEM
                       name: itemid
                       value:
-                        key: psutil.cpu.times.iowait
                         host: 'OS Linux - Python Agent - Psutil Module'
-                - type: GRAPH_CLASSIC
-                  width: '8'
-                  height: '6'
-                  fields:
-                    - type: INTEGER
-                      name: source_type
-                      value: '1'
-                    - type: ITEM
-                      name: itemid
-                      value:
                         key: psutil.cpu.usage
+                    - type: INTEGER
+                      name: show
+                      value: '1'
+                    - type: INTEGER
+                      name: show
+                      value: '2'
+                    - type: INTEGER
+                      name: show
+                      value: '4'
+                    - type: STRING
+                      name: thresholds.color.0
+                      value: FB8C00
+                    - type: STRING
+                      name: thresholds.color.1
+                      value: FF465C
+                    - type: STRING
+                      name: thresholds.threshold.0
+                      value: '90'
+                    - type: STRING
+                      name: thresholds.threshold.1
+                      value: '95'
+                    - type: STRING
+                      name: units
+                      value: '%'
+                    - type: INTEGER
+                      name: units_pos
+                      value: '3'
+                    - type: INTEGER
+                      name: units_size
+                      value: '15'
+                    - type: INTEGER
+                      name: value_size
+                      value: '55'
+                - type: graph
+                  x: '2'
+                  width: '7'
+                  height: '8'
+                  fields:
+                    - type: GRAPH
+                      name: graphid
+                      value:
                         host: 'OS Linux - Python Agent - Psutil Module'
-                - type: GRAPH_CLASSIC
-                  x: '16'
-                  width: '8'
-                  height: '6'
+                        name: 'CPU times'
+                - type: item
+                  x: '9'
+                  width: '2'
+                  hide_header: 'YES'
                   fields:
                     - type: INTEGER
-                      name: source_type
+                      name: adv_conf
                       value: '1'
+                    - type: INTEGER
+                      name: decimal_places
+                      value: '1'
+                    - type: INTEGER
+                      name: decimal_size
+                      value: '30'
+                    - type: STRING
+                      name: description
+                      value: 'RAM Total'
+                    - type: INTEGER
+                      name: desc_bold
+                      value: '1'
+                    - type: INTEGER
+                      name: desc_v_pos
+                      value: '0'
                     - type: ITEM
                       name: itemid
                       value:
-                        key: psutil.disk.read_bytes
                         host: 'OS Linux - Python Agent - Psutil Module'
-                - type: GRAPH_CLASSIC
+                        key: psutil.memory.total
+                    - type: INTEGER
+                      name: show
+                      value: '1'
+                    - type: INTEGER
+                      name: show
+                      value: '2'
+                    - type: STRING
+                      name: units
+                      value: B
+                    - type: INTEGER
+                      name: units_pos
+                      value: '3'
+                    - type: INTEGER
+                      name: units_size
+                      value: '15'
+                    - type: INTEGER
+                      name: value_size
+                      value: '55'
+                - type: item
+                  x: '9'
+                  'y': '2'
+                  width: '2'
+                  hide_header: 'YES'
+                  fields:
+                    - type: INTEGER
+                      name: adv_conf
+                      value: '1'
+                    - type: INTEGER
+                      name: decimal_places
+                      value: '1'
+                    - type: INTEGER
+                      name: decimal_size
+                      value: '30'
+                    - type: STRING
+                      name: description
+                      value: 'RAM Usage'
+                    - type: INTEGER
+                      name: desc_bold
+                      value: '1'
+                    - type: INTEGER
+                      name: desc_v_pos
+                      value: '0'
+                    - type: ITEM
+                      name: itemid
+                      value:
+                        host: 'OS Linux - Python Agent - Psutil Module'
+                        key: psutil.memory.percent
+                    - type: INTEGER
+                      name: show
+                      value: '1'
+                    - type: INTEGER
+                      name: show
+                      value: '2'
+                    - type: INTEGER
+                      name: show
+                      value: '4'
+                    - type: STRING
+                      name: thresholds.color.0
+                      value: FFB300
+                    - type: STRING
+                      name: thresholds.color.1
+                      value: FF465C
+                    - type: STRING
+                      name: thresholds.threshold.0
+                      value: '90'
+                    - type: STRING
+                      name: thresholds.threshold.1
+                      value: '95'
+                    - type: STRING
+                      name: units
+                      value: '%'
+                    - type: INTEGER
+                      name: units_pos
+                      value: '3'
+                    - type: INTEGER
+                      name: units_size
+                      value: '15'
+                    - type: INTEGER
+                      name: value_size
+                      value: '55'
+                - type: item
+                  x: '9'
+                  'y': '4'
+                  width: '2'
+                  hide_header: 'YES'
+                  fields:
+                    - type: INTEGER
+                      name: adv_conf
+                      value: '1'
+                    - type: INTEGER
+                      name: decimal_places
+                      value: '1'
+                    - type: INTEGER
+                      name: decimal_size
+                      value: '30'
+                    - type: STRING
+                      name: description
+                      value: 'Swapped IN'
+                    - type: INTEGER
+                      name: desc_bold
+                      value: '1'
+                    - type: INTEGER
+                      name: desc_v_pos
+                      value: '0'
+                    - type: ITEM
+                      name: itemid
+                      value:
+                        host: 'OS Linux - Python Agent - Psutil Module'
+                        key: psutil.swap.swapped_in
+                    - type: INTEGER
+                      name: show
+                      value: '1'
+                    - type: INTEGER
+                      name: show
+                      value: '2'
+                    - type: STRING
+                      name: units
+                      value: B/s
+                    - type: INTEGER
+                      name: units_pos
+                      value: '3'
+                    - type: INTEGER
+                      name: units_size
+                      value: '15'
+                    - type: INTEGER
+                      name: value_size
+                      value: '55'
+                - type: item
+                  x: '9'
+                  'y': '6'
+                  width: '2'
+                  hide_header: 'YES'
+                  fields:
+                    - type: INTEGER
+                      name: adv_conf
+                      value: '1'
+                    - type: INTEGER
+                      name: decimal_places
+                      value: '1'
+                    - type: INTEGER
+                      name: decimal_size
+                      value: '30'
+                    - type: STRING
+                      name: description
+                      value: 'Swapped OUT'
+                    - type: INTEGER
+                      name: desc_bold
+                      value: '1'
+                    - type: INTEGER
+                      name: desc_v_pos
+                      value: '0'
+                    - type: ITEM
+                      name: itemid
+                      value:
+                        host: 'OS Linux - Python Agent - Psutil Module'
+                        key: psutil.swap.swapped_out
+                    - type: INTEGER
+                      name: show
+                      value: '1'
+                    - type: INTEGER
+                      name: show
+                      value: '2'
+                    - type: INTEGER
+                      name: show
+                      value: '4'
+                    - type: STRING
+                      name: units
+                      value: B/s
+                    - type: INTEGER
+                      name: units_pos
+                      value: '3'
+                    - type: INTEGER
+                      name: units_size
+                      value: '15'
+                    - type: INTEGER
+                      name: value_size
+                      value: '55'
+                - type: graph
+                  name: RAM
+                  x: '11'
+                  width: '5'
+                  height: '4'
+                  fields:
+                    - type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'OS Linux - Python Agent - Psutil Module'
+                        name: 'Memory: usage (pie)'
+                - type: graph
+                  name: Swap
+                  x: '11'
+                  'y': '4'
+                  width: '5'
+                  height: '4'
+                  fields:
+                    - type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'OS Linux - Python Agent - Psutil Module'
+                        name: 'Swap usage (pie)'
+                - type: item
+                  x: '16'
+                  width: '2'
+                  hide_header: 'YES'
+                  fields:
+                    - type: INTEGER
+                      name: adv_conf
+                      value: '1'
+                    - type: INTEGER
+                      name: decimal_places
+                      value: '0'
+                    - type: INTEGER
+                      name: decimal_size
+                      value: '30'
+                    - type: STRING
+                      name: description
+                      value: 'Errors IN'
+                    - type: INTEGER
+                      name: desc_bold
+                      value: '1'
+                    - type: INTEGER
+                      name: desc_v_pos
+                      value: '0'
+                    - type: STRING
+                      name: down_color
+                      value: C0CA33
+                    - type: ITEM
+                      name: itemid
+                      value:
+                        host: 'OS Linux - Python Agent - Psutil Module'
+                        key: psutil.net.errin.sum10m
+                    - type: INTEGER
+                      name: show
+                      value: '1'
+                    - type: INTEGER
+                      name: show
+                      value: '2'
+                    - type: INTEGER
+                      name: show
+                      value: '4'
+                    - type: STRING
+                      name: thresholds.color.0
+                      value: FFFFFF
+                    - type: STRING
+                      name: thresholds.color.1
+                      value: FF465C
+                    - type: STRING
+                      name: thresholds.threshold.0
+                      value: '0'
+                    - type: STRING
+                      name: thresholds.threshold.1
+                      value: '1'
+                    - type: STRING
+                      name: units
+                      value: 'errors in 10min'
+                    - type: INTEGER
+                      name: units_pos
+                      value: '3'
+                    - type: INTEGER
+                      name: units_size
+                      value: '15'
+                    - type: STRING
+                      name: up_color
+                      value: FFEB3B
+                    - type: INTEGER
+                      name: value_size
+                      value: '55'
+                - type: item
+                  x: '16'
+                  'y': '2'
+                  width: '2'
+                  hide_header: 'YES'
+                  fields:
+                    - type: INTEGER
+                      name: adv_conf
+                      value: '1'
+                    - type: INTEGER
+                      name: decimal_places
+                      value: '0'
+                    - type: INTEGER
+                      name: decimal_size
+                      value: '30'
+                    - type: STRING
+                      name: description
+                      value: 'Errors OUT'
+                    - type: INTEGER
+                      name: desc_bold
+                      value: '1'
+                    - type: INTEGER
+                      name: desc_v_pos
+                      value: '0'
+                    - type: STRING
+                      name: down_color
+                      value: C0CA33
+                    - type: ITEM
+                      name: itemid
+                      value:
+                        host: 'OS Linux - Python Agent - Psutil Module'
+                        key: psutil.net.errout.sum10m
+                    - type: INTEGER
+                      name: show
+                      value: '1'
+                    - type: INTEGER
+                      name: show
+                      value: '2'
+                    - type: INTEGER
+                      name: show
+                      value: '4'
+                    - type: STRING
+                      name: thresholds.color.0
+                      value: FFFFFF
+                    - type: STRING
+                      name: thresholds.color.1
+                      value: FF465C
+                    - type: STRING
+                      name: thresholds.threshold.0
+                      value: '0'
+                    - type: STRING
+                      name: thresholds.threshold.1
+                      value: '1'
+                    - type: STRING
+                      name: units
+                      value: 'errors in 10min'
+                    - type: INTEGER
+                      name: units_pos
+                      value: '3'
+                    - type: INTEGER
+                      name: units_size
+                      value: '15'
+                    - type: STRING
+                      name: up_color
+                      value: FFEB3B
+                    - type: INTEGER
+                      name: value_size
+                      value: '55'
+                - type: item
+                  x: '16'
+                  'y': '4'
+                  width: '2'
+                  hide_header: 'YES'
+                  fields:
+                    - type: INTEGER
+                      name: adv_conf
+                      value: '1'
+                    - type: INTEGER
+                      name: decimal_places
+                      value: '0'
+                    - type: INTEGER
+                      name: decimal_size
+                      value: '30'
+                    - type: STRING
+                      name: description
+                      value: 'Drops IN'
+                    - type: INTEGER
+                      name: desc_bold
+                      value: '1'
+                    - type: INTEGER
+                      name: desc_v_pos
+                      value: '0'
+                    - type: STRING
+                      name: down_color
+                      value: C0CA33
+                    - type: ITEM
+                      name: itemid
+                      value:
+                        host: 'OS Linux - Python Agent - Psutil Module'
+                        key: psutil.net.dropin.sum10m
+                    - type: INTEGER
+                      name: show
+                      value: '1'
+                    - type: INTEGER
+                      name: show
+                      value: '2'
+                    - type: INTEGER
+                      name: show
+                      value: '4'
+                    - type: STRING
+                      name: thresholds.color.0
+                      value: FFFFFF
+                    - type: STRING
+                      name: thresholds.color.1
+                      value: FF465C
+                    - type: STRING
+                      name: thresholds.threshold.0
+                      value: '0'
+                    - type: STRING
+                      name: thresholds.threshold.1
+                      value: '1'
+                    - type: STRING
+                      name: units
+                      value: 'drops in 10min'
+                    - type: INTEGER
+                      name: units_pos
+                      value: '3'
+                    - type: INTEGER
+                      name: units_size
+                      value: '15'
+                    - type: STRING
+                      name: up_color
+                      value: FFEB3B
+                    - type: INTEGER
+                      name: value_size
+                      value: '55'
+                - type: item
                   x: '16'
                   'y': '6'
-                  width: '8'
-                  height: '6'
+                  width: '2'
+                  hide_header: 'YES'
                   fields:
                     - type: INTEGER
-                      name: source_type
+                      name: adv_conf
                       value: '1'
+                    - type: INTEGER
+                      name: decimal_places
+                      value: '0'
+                    - type: INTEGER
+                      name: decimal_size
+                      value: '30'
+                    - type: STRING
+                      name: description
+                      value: 'Drops OUT'
+                    - type: INTEGER
+                      name: desc_bold
+                      value: '1'
+                    - type: INTEGER
+                      name: desc_v_pos
+                      value: '0'
+                    - type: STRING
+                      name: down_color
+                      value: C0CA33
                     - type: ITEM
                       name: itemid
                       value:
-                        key: psutil.disk.write_bytes
                         host: 'OS Linux - Python Agent - Psutil Module'
-                - type: GRAPH_PROTOTYPE
-                  x: '8'
-                  'y': '24'
-                  width: '8'
-                  height: '6'
-                  fields:
+                        key: psutil.net.dropout.sum10m
                     - type: INTEGER
-                      name: columns
+                      name: show
                       value: '1'
                     - type: INTEGER
-                      name: source_type
-                      value: '3'
-                    - type: ITEM_PROTOTYPE
-                      name: itemid
-                      value:
-                        key: 'psutil.net.bytes_sent.[{#NIC}]'
-                        host: 'OS Linux - Python Agent - Psutil Module'
-                - type: GRAPH_PROTOTYPE
-                  x: '16'
-                  'y': '24'
-                  width: '8'
-                  height: '6'
-                  fields:
+                      name: show
+                      value: '2'
                     - type: INTEGER
-                      name: columns
+                      name: show
+                      value: '4'
+                    - type: STRING
+                      name: thresholds.color.0
+                      value: FFFFFF
+                    - type: STRING
+                      name: thresholds.color.1
+                      value: FF465C
+                    - type: STRING
+                      name: thresholds.threshold.0
+                      value: '0'
+                    - type: STRING
+                      name: thresholds.threshold.1
                       value: '1'
+                    - type: STRING
+                      name: units
+                      value: 'drops in 10min'
                     - type: INTEGER
-                      name: source_type
+                      name: units_pos
                       value: '3'
-                    - type: ITEM_PROTOTYPE
-                      name: itemid
+                    - type: INTEGER
+                      name: units_size
+                      value: '15'
+                    - type: STRING
+                      name: up_color
+                      value: FFEB3B
+                    - type: INTEGER
+                      name: value_size
+                      value: '55'
+                - type: graph
+                  x: '18'
+                  width: '6'
+                  height: '8'
+                  fields:
+                    - type: GRAPH
+                      name: graphid
                       value:
-                        key: 'psutil.net.bytes_recv.[{#NIC}]'
                         host: 'OS Linux - Python Agent - Psutil Module'
+                        name: 'Network traffic'
       valuemaps:
         - uuid: 06147666aa454b939d506ef3668d7072
           name: NIC_DUPLEX
@@ -1377,6 +2408,13 @@ zabbix_export:
               newvalue: half
             - value: '2'
               newvalue: full
+        - uuid: 27431abd82a4421b809dcdc65f24ad8c
+          name: OK_BAD
+          mappings:
+            - value: '0'
+              newvalue: OK
+            - value: '1'
+              newvalue: BAD
         - uuid: ce0e76671c9d47cbbeac3b4f9fdd06ee
           name: UP_DOWN
           mappings:
@@ -1384,62 +2422,6 @@ zabbix_export:
               newvalue: up
             - value: '0'
               newvalue: down
-    - uuid: 0e9d685f7dad4763bead407d8691a854
-      template: 'OS Linux - Python Agent - Pyzender Health Module'
-      name: 'OS Linux - Python Agent - Pyzender Health Module'
-      groups:
-        - name: Templates
-      items:
-        - uuid: f3c066b55c744690b0e864f34586d2fe
-          name: Exception
-          type: TRAP
-          key: pyzender.health.exception
-          delay: '0'
-          history: 7d
-          trends: '0'
-          value_type: TEXT
-        - uuid: d50c534f5505458da42cf6449b91aced
-          name: Queue
-          type: TRAP
-          key: pyzender.health.queue
-          delay: '0'
-          history: 7d
-          units: reports
-          description: 'Number of unprocessed reports in queue of Pyzender service'
-          preprocessing:
-            - type: DISCARD_UNCHANGED_HEARTBEAT
-              parameters:
-                - '{$HEALTH_HEARTBEAT}'
-        - uuid: d51f9352eae745ff896afa7cb3f18c5d
-          name: Running
-          type: TRAP
-          key: pyzender.health.running
-          delay: '0'
-          history: 7d
-          preprocessing:
-            - type: DISCARD_UNCHANGED_HEARTBEAT
-              parameters:
-                - '{$HEALTH_HEARTBEAT}'
-        - uuid: e1bcc75091d542d1a5cb071f072e938c
-          name: 'Sent items'
-          type: TRAP
-          key: pyzender.health.sent
-          delay: '0'
-          history: 7d
-          units: items/s
-          description: 'Number of rows of data that were successfully sent via the zabbix_sernder binary per second'
-          preprocessing:
-            - type: CHANGE_PER_SECOND
-              parameters:
-                - ''
-            - type: IN_RANGE
-              parameters:
-                - '0'
-                - ''
-      macros:
-        - macro: '{$HEALTH_HEARTBEAT}'
-          value: '300'
-          description: 'Interval in seconds to discard unchanged values'
     - uuid: 7a8a5571e0e54ef0be66b5f02d1b17fe
       template: 'OS Linux - Python Agent - QBittorrent Module'
       name: 'OS Linux - Python Agent - QBittorrent Module'
@@ -1544,51 +2526,136 @@ zabbix_export:
   graphs:
     - uuid: c831e83b8ee54b48873cb06e06286240
       name: 'CPU times'
+      height: '600'
       show_triggers: 'NO'
       type: STACKED
       graph_items:
+        - color: E53935
+          item:
+            host: 'OS Linux - Python Agent - Psutil Module'
+            key: psutil.cpu.times.iowait
         - sortorder: '1'
-          color: BBDEFB
+          color: ECEFF1
           item:
             host: 'OS Linux - Python Agent - Psutil Module'
             key: psutil.cpu.times.guest
         - sortorder: '2'
-          color: 64B5F6
+          color: B0BEC5
           item:
             host: 'OS Linux - Python Agent - Psutil Module'
             key: psutil.cpu.times.guest_nice
         - sortorder: '3'
-          color: 2196F3
-          item:
-            host: 'OS Linux - Python Agent - Psutil Module'
-            key: psutil.cpu.times.iowait
-        - sortorder: '4'
-          color: 1E88E5
+          color: 78909C
           item:
             host: 'OS Linux - Python Agent - Psutil Module'
             key: psutil.cpu.times.irq
-        - sortorder: '5'
-          color: 1976D2
+        - sortorder: '4'
+          color: 455A64
           item:
             host: 'OS Linux - Python Agent - Psutil Module'
             key: psutil.cpu.times.nice
-        - sortorder: '6'
-          color: 1565C0
+        - sortorder: '5'
+          color: 13191C
           item:
             host: 'OS Linux - Python Agent - Psutil Module'
             key: psutil.cpu.times.softirq
-        - sortorder: '7'
-          color: 0D47A1
+        - sortorder: '6'
+          color: 90CAF9
           item:
             host: 'OS Linux - Python Agent - Psutil Module'
             key: psutil.cpu.times.steal
-        - sortorder: '8'
-          color: '093578'
+        - sortorder: '7'
+          color: 3F51B5
           item:
             host: 'OS Linux - Python Agent - Psutil Module'
             key: psutil.cpu.times.system
-        - sortorder: '9'
-          color: '062350'
+        - sortorder: '8'
+          color: 131A5E
           item:
             host: 'OS Linux - Python Agent - Psutil Module'
             key: psutil.cpu.times.user
+    - uuid: a746a60fed894afb852fc109a86d9f45
+      name: 'Memory: usage (pie)'
+      height: '400'
+      yaxismax: '0'
+      show_work_period: 'NO'
+      show_triggers: 'NO'
+      type: PIE
+      show_3d: 'YES'
+      graph_items:
+        - color: 0D47A1
+          calc_fnc: LAST
+          item:
+            host: 'OS Linux - Python Agent - Psutil Module'
+            key: psutil.memory.used
+        - sortorder: '1'
+          color: 5E35B1
+          calc_fnc: LAST
+          item:
+            host: 'OS Linux - Python Agent - Psutil Module'
+            key: psutil.memory.shared
+        - sortorder: '2'
+          color: D81B60
+          calc_fnc: LAST
+          item:
+            host: 'OS Linux - Python Agent - Psutil Module'
+            key: psutil.memory.buffers
+        - sortorder: '3'
+          color: CE93D8
+          calc_fnc: MAX
+          item:
+            host: 'OS Linux - Python Agent - Psutil Module'
+            key: psutil.memory.cached
+        - sortorder: '4'
+          color: BBDEFB
+          calc_fnc: LAST
+          item:
+            host: 'OS Linux - Python Agent - Psutil Module'
+            key: psutil.memory.free
+    - uuid: 3cacfcd6532f45cf873c63b16fbeeed7
+      name: 'Network traffic'
+      height: '400'
+      show_work_period: 'NO'
+      show_triggers: 'NO'
+      graph_items:
+        - sortorder: '1'
+          drawtype: BOLD_LINE
+          color: C2185B
+          item:
+            host: 'OS Linux - Python Agent - Psutil Module'
+            key: psutil.net.bytes_recv_rate
+        - sortorder: '2'
+          drawtype: BOLD_LINE
+          color: 303F9F
+          item:
+            host: 'OS Linux - Python Agent - Psutil Module'
+            key: psutil.net.bytes_send_rate_inverted
+    - uuid: 42fb4eb544c74babba0fb2a11fd81335
+      name: 'Swap usage (pie)'
+      height: '400'
+      yaxismax: '0'
+      show_work_period: 'NO'
+      show_triggers: 'NO'
+      type: PIE
+      show_3d: 'YES'
+      graph_items:
+        - color: 0D47A1
+          calc_fnc: LAST
+          item:
+            host: 'OS Linux - Python Agent - Psutil Module'
+            key: psutil.swap.used
+        - sortorder: '1'
+          color: B3E5FC
+          calc_fnc: LAST
+          item:
+            host: 'OS Linux - Python Agent - Psutil Module'
+            key: psutil.swap.free
+    - uuid: 0dac501d3dc44072bae7f7b2e076300d
+      name: 'Unsorted reports & sent items'
+      ymin_type_1: FIXED
+      graph_items:
+        - sortorder: '1'
+          color: EF5350
+          item:
+            host: 'OS Linux - Python Agent'
+            key: pyzender.queue
